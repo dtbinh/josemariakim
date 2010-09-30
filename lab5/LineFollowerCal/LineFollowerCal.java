@@ -18,10 +18,10 @@ public class LineFollowerCal
   private static BlackWhiteSensor sensor;
   
   // Porportional range
-  private static int max_range = 50;
-  private static int min_range = 40;
+  private static int max_power = 100;
+  private static int min_power = 40;
   
-  private static int Tp = 50;
+  private static int Tp = 70;
   private static int offset = 45;
   private static float Kp = 5.0F;
   private static float Ki = 0.0F;
@@ -34,11 +34,18 @@ public class LineFollowerCal
 
   public LineFollowerCal() {
      sensor = new BlackWhiteSensor(SensorPort.S3);
-     sensor.calibrate();
   }
   
   public void calibrate() {
-	  
+	 sensor.calibrate();
+	 offset = sensor.getThreshold();
+  }
+  
+  public int limitPower(int p)
+  {
+	  if (p < min_power) return min_power;
+	  if (p > max_power) return max_power;
+	  return p;
   }
   
   public void pidCalculate(int lvalue) {
@@ -47,14 +54,13 @@ public class LineFollowerCal
 	 float derivative = 0;
 	 
  	 error = lvalue - offset;
- 	 if (error > max_range) error = max_range;
- 	 if (error < min_range) error = min_range;
- 	 
  	 integral = (integral*2)/3 + error;
  	 derivative = error - lastError;
- 	 turn = (int)(Kp*error + Ki*integral + Kd*derivative);
- 	 powerA = Tp + turn; 
- 	 powerC = Tp - turn;
+ 	 turn = (int)(Kp*error + Ki*integral + Kd*derivative);	 
+ 	 
+ 	 powerA = limitPower(Tp + turn); 
+ 	 powerC = limitPower(Tp - turn);
+ 	 
  	 lastError = error;
  }
   
@@ -64,7 +70,9 @@ public class LineFollowerCal
 	 final int power = 80;
 	 int LightValue;
 	 
-	 LineFollowerCal lineFollower = new LineFollowerCal(); 	 
+	 LineFollowerCal lineFollower = new LineFollowerCal(); 
+	 
+	 lineFollower.calibrate();
 	 
      LCD.clear();
      LCD.drawString("Light: ", 0, 2); 
@@ -75,15 +83,16 @@ public class LineFollowerCal
 	     LCD.drawInt(LightValue,4,10,2);
 	     LCD.refresh();
      
-	     /*
+	     /**/
 	     lineFollower.pidCalculate(LightValue);
 	     Car.forward(powerA, powerC);
-	     */
 	     
+	     /*
 	     if ( sensor.black() )
 	         Car.forward(power, 0);
 	     else
 	         Car.forward(0, power);
+	     */
 	     
 	     Thread.sleep(10);
      }

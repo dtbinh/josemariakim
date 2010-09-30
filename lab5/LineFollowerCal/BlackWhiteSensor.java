@@ -26,6 +26,18 @@ public class BlackWhiteSensor {
 	   ls.setFloodlight(true);
    }
 
+   public int getThreshold() {
+	   return blackWhiteThreshold;
+   }
+   
+   public int getBlack() {
+	   return blackLightValue;
+   }
+   
+   public int getWhite() {
+	   return whiteLightValue;
+   }
+
    private int read(String color){
 	   
 	   int lightValue=0;
