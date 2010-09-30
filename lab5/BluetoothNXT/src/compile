@@ -1,0 +1,2 @@
+nxjc BTReceive.java
+nxjlink -v BTReceive -o BTReceive.nxj
