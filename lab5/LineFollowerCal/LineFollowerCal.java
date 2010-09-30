@@ -18,14 +18,31 @@ public class LineFollowerCal
   private static BlackWhiteSensor sensor;
   
   // Porportional range
-  private static int max_power = 100;
-  private static int min_power = 40;
+  private static int max_power = 90;
+  private static int min_power = 60;
   
-  private static int Tp = 70;
+  private static int Tp = 75;
   private static int offset = 45;
-  private static float Kp = 5.0F;
+  /* Test0 
+  private static float Kp = 2.0F;
   private static float Ki = 0.0F;
   private static float Kd = 0.0F;
+  */
+  /* Test1 
+  private static float Kp =  1.20F;
+  private static float Ki =  0.03F;
+  private static float Kd = 12.00F;
+  */
+  /* Test2
+  private static float Kp =  2.40F;
+  private static float Ki =  0.08F;
+  private static float Kd = 18.00F;
+  */
+  /* Test3 */ 
+  private static float Kp =  1.80F;
+  private static float Ki =  0.045F;
+  private static float Kd = 18.00F;
+ 
 
   private int lastError;
   private float integral = 0;
@@ -69,6 +86,7 @@ public class LineFollowerCal
   {
 	 final int power = 80;
 	 int LightValue;
+	 int time = 0;
 	 
 	 LineFollowerCal lineFollower = new LineFollowerCal(); 
 	 
@@ -76,11 +94,13 @@ public class LineFollowerCal
 	 
      LCD.clear();
      LCD.drawString("Light: ", 0, 2); 
+     LCD.drawString("Time: ", 0, 3); 
 	 
      while (! Button.ESCAPE.isPressed())
      {
     	 LightValue = sensor.light();
 	     LCD.drawInt(LightValue,4,10,2);
+	     LCD.drawInt(time,4,10,3);
 	     LCD.refresh();
      
 	     /**/
@@ -95,6 +115,7 @@ public class LineFollowerCal
 	     */
 	     
 	     Thread.sleep(10);
+	     time++;
      }
      
      Car.stop();
