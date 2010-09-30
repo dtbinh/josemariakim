@@ -14,38 +14,71 @@ import lejos.nxt.*;
  */
 public class LineFollowerCal
 {
+
+  private static BlackWhiteSensor sensor;
+  
+  // Porportional range
+  private static int max_range = 50;
+  private static int min_range = 40;
+  
+  private static int Tp = 50;
+  private static int offset = 45;
+  private static float Kp = 5.0F;
+  private static float Ki = 0.0F;
+  private static float Kd = 0.0F;
+
+  private int lastError;
+  private float integral = 0;
+  private static int powerA;
+  private static int powerC;
+
+  public LineFollowerCal() {
+     sensor = new BlackWhiteSensor(SensorPort.S3);
+     sensor.calibrate();
+  }
+  
+  public void calibrate() {
+	  
+  }
+  
+  public void pidCalculate(int lvalue) {
+	 int turn;
+	 int error;
+	 float derivative = 0;
+	 
+ 	 error = lvalue - offset;
+ 	 if (error > max_range) error = max_range;
+ 	 if (error < min_range) error = min_range;
+ 	 
+ 	 integral = (integral*2)/3 + error;
+ 	 derivative = error - lastError;
+ 	 turn = (int)(Kp*error + Ki*integral + Kd*derivative);
+ 	 powerA = Tp + turn; 
+ 	 powerC = Tp - turn;
+ 	 lastError = error;
+ }
+  
   public static void main (String[] aArg)
   throws Exception
   {
-     final int power = 80;
-     // Porportional range
-     final int max_range = 50;
-     final int min_range = 40;
-     final float Kp = 0.5F;
-     final float Ki = 0.0F;
-     final float Kd = 0.0F;
-     final int power_porpotional;
-     final int offset = 45;
-     int LightValue;
-     int error;
-     float integral = 0;
-	  
-     BlackWhiteSensor sensor = new BlackWhiteSensor(SensorPort.S3);
+	 final int power = 80;
+	 int LightValue;
 	 
-     sensor.calibrate();
+	 LineFollowerCal lineFollower = new LineFollowerCal(); 	 
 	 
      LCD.clear();
      LCD.drawString("Light: ", 0, 2); 
 	 
      while (! Button.ESCAPE.isPressed())
      {
-    	 //LightValue = sensor.light();
-    	 //error = LightValue - offset;
-    	 //integral = (integral*2)/3 + error;
-    	 
-	     LCD.drawInt(sensor.light(),4,10,2);
+    	 LightValue = sensor.light();
+	     LCD.drawInt(LightValue,4,10,2);
 	     LCD.refresh();
-	     
+     
+	     /*
+	     lineFollower.pidCalculate(LightValue);
+	     Car.forward(powerA, powerC);
+	     */
 	     
 	     if ( sensor.black() )
 	         Car.forward(power, 0);
