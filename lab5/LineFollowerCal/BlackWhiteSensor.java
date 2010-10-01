@@ -29,6 +29,10 @@ public class BlackWhiteSensor {
    public int getThreshold() {
 	   return blackWhiteThreshold;
    }
+
+   public int getWhiteToBlackSpan() {
+	   return Math.abs(blackLightValue - whiteLightValue);
+   }
    
    public int getBlack() {
 	   return blackLightValue;
