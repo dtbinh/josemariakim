@@ -26,6 +26,14 @@ public class RoboRace implements ButtonListener
 		  pause = !pause;
 	      lineFollower.pause(pause);
 	  }
+	  if (b == Button.LEFT)
+	  {
+		  lineFollower.decSensitiv();
+	  }
+	  if (b == Button.RIGHT)
+	  {
+	     lineFollower.incSensitiv(); 
+	  }
   }
 
   public void buttonReleased(Button b){}
@@ -35,6 +43,8 @@ public class RoboRace implements ButtonListener
  	 int time = 0; 
  	 Button.ESCAPE.addButtonListener(this);
  	 Button.ENTER.addButtonListener(this);
+ 	 Button.LEFT.addButtonListener(this);
+ 	 Button.RIGHT.addButtonListener(this);
      
  	 while (keepItRunning)
      {    	 

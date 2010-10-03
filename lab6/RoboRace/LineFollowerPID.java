@@ -20,10 +20,10 @@ public class LineFollowerPID extends Thread
   
   // Configuration values
   private final int max_power = 100;
-  private final int min_power = 20;
+  private final int min_power = 0;
   private final int Tp = 78;  // default forward power
   private final int dT = 5;   // ms
-  private final int Pc = 800; // ms, estimate depends on Tp and Kp
+  private int Pc = 800; // ms, estimate depends on Tp and Kp
   
   // Computed constants
   private int offset = 45;
@@ -60,18 +60,33 @@ public class LineFollowerPID extends Thread
 	  Kd = Kp*((float)Pc/(8*dT));  
   }
   
-  public void calibrate() {
-	 sensor.calibrate();
-	 offset = sensor.getThreshold();
-	 computePIDConstants();
-     integral = 0;
-
+  private void displayConstants() {	  
      LCD.drawString("Kp [*10] ", 0, 4);
      LCD.drawInt((int)(Kp*10),4,10,4);
 	 LCD.drawString("Ki [*1000]", 0, 5);
      LCD.drawInt((int)(Ki*1000),4,10,5);
 	 LCD.drawString("Kd ", 0, 6);
      LCD.drawInt((int)(Kd),4,10,6);
+  }
+  
+  public void calibrate() {
+	 sensor.calibrate();
+	 offset = sensor.getThreshold();
+	 computePIDConstants();
+     integral = 0;
+     displayConstants();
+  }
+  
+  public void incSensitiv() {
+	 if (Pc < 2000) Pc += 100;  
+	 computePIDConstants();
+	 displayConstants();
+  }
+  
+  public void decSensitiv() {  
+	 if (Pc > 200) Pc -= 100;  
+	 computePIDConstants();
+	 displayConstants();
   }
   
   private int limitPower(int p)
