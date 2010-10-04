@@ -20,12 +20,14 @@ public class LineFollowerPID extends Thread
   
   // Configuration values
   private final int max_power = 100;
-  private final int min_power = 0;
-  private final int Tp = 78;  // default forward power
+  private final int min_power = 20;
+  private int Tp = 80;  // default forward power
+  
+  //private int Tp = 66;  // default forward power, OK
   private final int dT = 5;   // ms
   private int Pc = 800; // ms, estimate depends on Tp and Kp
   
-  // Computed constants
+  // Computed constants, OK
   private int offset = 45;
   private float Kp =  3.00F;
   private float Ki =  0.05F;
@@ -38,6 +40,7 @@ public class LineFollowerPID extends Thread
   private int powerC;
   private int lightValue;
   private boolean pause;
+  private boolean rightTurn = true;
 
   public LineFollowerPID() {
      sensor = new BlackWhiteSensor(SensorPort.S3);
@@ -72,20 +75,22 @@ public class LineFollowerPID extends Thread
   public void calibrate() {
 	 sensor.calibrate();
 	 offset = sensor.getThreshold();
-	 computePIDConstants();
+	 //computePIDConstants();
      integral = 0;
      displayConstants();
   }
   
   public void incSensitiv() {
-	 if (Pc < 2000) Pc += 100;  
-	 computePIDConstants();
+	 //if (Pc < 2000) Pc += 100;  
+	 if (Tp < 100) Tp += 2;  
+	 //computePIDConstants();
 	 displayConstants();
   }
   
   public void decSensitiv() {  
-	 if (Pc > 200) Pc -= 100;  
-	 computePIDConstants();
+	 //if (Pc > 200) Pc -= 100;  
+	 if (Tp > 50) Tp -= 2;  
+	 //computePIDConstants();
 	 displayConstants();
   }
   
@@ -106,8 +111,21 @@ public class LineFollowerPID extends Thread
  	 derivative = error - lastError;
  	 turn = (int)(Kp*error + Ki*integral + Kd*derivative);	 
  	 
- 	 powerA = limitPower(Tp + turn); 
- 	 powerC = limitPower(Tp - turn);
+ 	 // Try to reduce power in turns 
+ 	 if (turn > 0)
+ 	 {
+ 		powerA = limitPower(Tp); 
+ 		powerC = limitPower(Tp - 2*turn);
+ 	 }
+ 	 else
+ 	 {
+  		powerA = limitPower(Tp + 2*turn); 
+ 		powerC = limitPower(Tp); 		 
+ 	 }
+ 	 
+ 	 
+ 	 //powerA = limitPower(Tp + turn); 
+ 	 //powerC = limitPower(Tp - turn);
  	 
  	 lastError = error;
  }
@@ -125,7 +143,10 @@ public class LineFollowerPID extends Thread
 	     if (pause)
 	    	 Car.stop();
     	 else
-    		 Car.forward(powerA, powerC);
+    		 if (rightTurn)
+    			 Car.forward(powerA, powerC);
+    		 else 
+    			 Car.forward(powerC, powerA);
     	 
 	     Thread.sleep(dT);  	 
 	     
