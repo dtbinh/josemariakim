@@ -19,9 +19,9 @@ public class LineFollowerCal
   
   // Porportional range
   private static int max_power = 100;
-  private static int min_power = 20;
+  private static int min_power = 0;
   
-  private static int Tp = 78;
+  private static int Tp = 66;
   private static int offset = 45;
   private static int dT = 5;   // ms
   private static int Pc = 800; // ms, estimate depends on Tp and Kp
@@ -51,7 +51,7 @@ public class LineFollowerCal
   private static float Ki =  0.034F;
   private static float Kd = 42.00F;
   */
-  /* Test5 */
+  /* Test5, OK */
   private static float Kp =  3.00F;
   private static float Ki =  0.05F;
   private static float Kd = 45.00F;
@@ -78,7 +78,7 @@ public class LineFollowerCal
   public void calibrate() {
 	 sensor.calibrate();
 	 offset = sensor.getThreshold();
-	 computePIDConstants();
+	 //computePIDConstants();
   }
   
   public int limitPower(int p)
@@ -127,7 +127,7 @@ public class LineFollowerCal
 	 while (Button.ENTER.isPressed());
 	 LCD.drawString("Press ENTER     ", 0, 0);
 	 LCD.drawString("to start        ", 0, 1);
-	 LCD.drawString("Robot Race      ", 0, 2);
+	 LCD.drawString("Line follower   ", 0, 2);
 	 while (!Button.ENTER.isPressed());
 	 while (Button.ENTER.isPressed());
 	 
