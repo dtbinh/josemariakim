@@ -16,22 +16,25 @@ import lejos.nxt.*;
 public class LineFollowerPID extends Thread
 {
 
-  private BlackWhiteSensor sensor;
+  public BlackWhiteSensor sensor;
   
   // Configuration values
   private final int max_power = 100;
-  private final int min_power = 20;
-  private int Tp = 80;  // default forward power
+  private final int min_power = 40;
+  private final int default_Tp = 75;
+  private int Tp = 75;  // default forward power
   
   //private int Tp = 66;  // default forward power, OK
-  private final int dT = 5;   // ms
+  private final int dT = 4;   // ms
   private int Pc = 800; // ms, estimate depends on Tp and Kp
   
   // Computed constants, OK
   private int offset = 45;
   private float Kp =  3.00F;
-  private float Ki =  0.05F;
-  private float Kd = 45.00F;
+  private float Ki =  0.03F;
+  private float Kd = 75.00F;
+  //private float Ki =  0.05F;
+  //private float Kd = 45.00F;
 
   // Variables
   private float integral = 0;
@@ -40,10 +43,19 @@ public class LineFollowerPID extends Thread
   private int powerC;
   private int lightValue;
   private boolean pause;
+  private boolean stop;
   private boolean rightTurn = true;
 
   public LineFollowerPID() {
      sensor = new BlackWhiteSensor(SensorPort.S3);
+  }
+  
+  public void setLeftSideOfLine() {
+	  rightTurn = true;  
+  }
+  
+  public void setRightSideOfLine() {
+	  rightTurn = false;	  
   }
   
   public int getLight() {
@@ -52,6 +64,20 @@ public class LineFollowerPID extends Thread
   
   public void pause(boolean p) {
 	  pause = p;
+  }
+  
+  public void stop(boolean s) {
+	  stop = s;
+  }
+  
+  public void setSpeed(int speed)
+  {
+	  Tp = speed;
+  }
+  
+  public void setDefaultSpeed()
+  {
+	  Tp = default_Tp;
   }
   
   private void computePIDConstants() {
@@ -140,13 +166,16 @@ public class LineFollowerPID extends Thread
     	 lightValue = sensor.light();
 	     pidCalculate(lightValue);
 	     
-	     if (pause)
-	    	 Car.stop();
-    	 else
-    		 if (rightTurn)
-    			 Car.forward(powerA, powerC);
-    		 else 
-    			 Car.forward(powerC, powerA);
+	     if (!pause)
+	     {
+		     if (stop)
+		    	 Car.stop();
+	    	 else
+	    		 if (rightTurn)
+	    			 Car.forward(powerA, powerC);
+	    		 else 
+	    			 Car.forward(powerC, powerA);
+	     }
     	 
 	     Thread.sleep(dT);  	 
 	     

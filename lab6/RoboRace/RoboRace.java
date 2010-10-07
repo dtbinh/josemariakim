@@ -10,8 +10,9 @@ public class RoboRace implements ButtonListener
 {
   private static int dT = 1000;   // seconds
   private boolean keepItRunning = true;
-  private boolean pause = false;
+  private boolean stopped = false;
   private static LineFollowerPID lineFollower;
+  private static StateController stateController;
 
   public RoboRace() {
   }
@@ -23,8 +24,8 @@ public class RoboRace implements ButtonListener
 	  
 	  if (b == Button.ENTER)
 	  {
-		  pause = !pause;
-	      lineFollower.pause(pause);
+		  stopped = !stopped;
+	      lineFollower.stop(stopped);
 	  }
 	  if (b == Button.LEFT)
 	  {
@@ -65,6 +66,7 @@ public class RoboRace implements ButtonListener
   {	 
 	 lineFollower = new LineFollowerPID(); 
 	 lineFollower.calibrate();
+	 stateController = new StateController(lineFollower);	 
 	 
 	 while (Button.ENTER.isPressed());
 	 LCD.drawString("Press ENTER     ", 0, 0);
@@ -81,6 +83,8 @@ public class RoboRace implements ButtonListener
   
      lineFollower.setDaemon(true);
      lineFollower.start();
+     stateController.setDaemon(true);
+     stateController.start();
    	 
      RoboRace roboRace = new RoboRace();
      roboRace.run();

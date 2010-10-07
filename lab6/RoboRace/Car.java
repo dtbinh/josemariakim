@@ -22,6 +22,14 @@ public class Car
     {	   
     } 
    
+    public static int updateTachoCounter() {
+    	return Motor.B.getTachoCount();
+    }
+    
+    public static void resetTachoCounter() {
+    	Motor.B.resetTachoCount();
+    }
+    
     public static void stop() 
     {
 	    leftMotor.controlMotor(0,stop);
@@ -38,5 +46,11 @@ public class Car
     {
 	    leftMotor.controlMotor(leftPower,backward);
 	    rightMotor.controlMotor(rightPower,backward);
+    }
+
+    public static void turn(int leftPower, int rightPower)
+    {
+	    leftMotor.controlMotor(leftPower,backward);
+	    rightMotor.controlMotor(rightPower,forward);
     }
 }
