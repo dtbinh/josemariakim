@@ -26,9 +26,6 @@ public class StateController extends Thread
 
 	   return atThreshold;
 	}
-
-	//Car.stop();
-	//Thread.sleep(1000);
 	
 	private void handelStates() throws InterruptedException
     {
@@ -40,7 +37,7 @@ public class StateController extends Thread
     	switch (state)
     	{
     		case 1: // Moving up first time track 1
-    			if (lookForThreshold(dist, 2100)) // Track 1
+    			if (lookForThreshold(dist, 2100)) // Track 1 2100
     			{
     			    lineFollower.pause(true);
     			    time = 0;
@@ -53,20 +50,18 @@ public class StateController extends Thread
     			    state = 3;
     			}
     			else
-    				Car.forward(60, 35); // Turn on plateau no. 1
+    				Car.forward(60, 37); // Turn on plateau no. 1 60,35 (less battery)
     			break;
     		case 3:
     			if (lineFollower.sensor.black())
     			{
-    				//Car.stop();
-    				//sleep(500);
     				Car.resetTachoCounter();
     			    lineFollower.pause(false);
     				time = 0;
     			    state = 10;    				
     			}
     			else 
-    				Car.forward(55, 30); // Turn on plateau no. 1
+    				Car.forward(40, 30); // Turn on plateau no. 1
     			break;
     		case 10: // Moving up second time track 2
     			if (lookForThreshold(dist, 2100)) // Track 2
@@ -87,8 +82,6 @@ public class StateController extends Thread
     		case 12:
     			if (lineFollower.sensor.black())
     			{
-    				//Car.stop();
-    				//sleep(500);
     				Car.resetTachoCounter();
     				lineFollower.setRightSideOfLine();
     			    lineFollower.pause(false);
@@ -102,22 +95,19 @@ public class StateController extends Thread
     			if (lookForThreshold(dist, 2400)) // Track 3
     			{
     			    lineFollower.pause(true);
-    				Car.stop();
-    				sleep(500);
     			    time = 0;
     			    state = 21;
     			}    			
     			break;
     		case 21: // At plateau no. 3
-    			if (time > 75)
+    			if (time > 50)
     			{
     				Car.stop();
-    				sleep(1000);
     				Car.resetTachoCounter();
     				lineFollower.setLeftSideOfLine();
     				lineFollower.setSpeed(60);
-    			    lineFollower.pause(false);
-    				state = 30;
+    			    //lineFollower.pause(false);
+    				state = 31;
     			}
     			else
     				Car.turn(50, 50);
@@ -140,7 +130,6 @@ public class StateController extends Thread
 	public void run ()
 	{
 		Car.resetTachoCounter();
-	    //lineFollower.pause(true);
 		
 	    while (true)
 	     {

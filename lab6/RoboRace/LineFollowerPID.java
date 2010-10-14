@@ -23,18 +23,16 @@ public class LineFollowerPID extends Thread
   private final int min_power = 40;
   private final int default_Tp = 75;
   private int Tp = 75;  // default forward power
+  private int Tp_saved = 75;
   
-  //private int Tp = 66;  // default forward power, OK
   private final int dT = 4;   // ms
   private int Pc = 800; // ms, estimate depends on Tp and Kp
   
   // Computed constants, OK
   private int offset = 45;
-  private float Kp =  3.00F;
+  private float Kp =  2.90F;
   private float Ki =  0.03F;
   private float Kd = 75.00F;
-  //private float Ki =  0.05F;
-  //private float Kd = 45.00F;
 
   // Variables
   private float integral = 0;
@@ -64,6 +62,12 @@ public class LineFollowerPID extends Thread
   
   public void pause(boolean p) {
 	  pause = p;
+	  
+	  if (pause)
+	  {
+		  Tp_saved = Tp;
+		  Tp = Tp - 25;
+	  }	  
   }
   
   public void stop(boolean s) {
@@ -107,16 +111,12 @@ public class LineFollowerPID extends Thread
   }
   
   public void incSensitiv() {
-	 //if (Pc < 2000) Pc += 100;  
 	 if (Tp < 100) Tp += 2;  
-	 //computePIDConstants();
 	 displayConstants();
   }
   
   public void decSensitiv() {  
-	 //if (Pc > 200) Pc -= 100;  
 	 if (Tp > 50) Tp -= 2;  
-	 //computePIDConstants();
 	 displayConstants();
   }
   
@@ -149,15 +149,12 @@ public class LineFollowerPID extends Thread
  		powerC = limitPower(Tp); 		 
  	 }
  	 
- 	 
- 	 //powerA = limitPower(Tp + turn); 
- 	 //powerC = limitPower(Tp - turn);
- 	 
  	 lastError = error;
  }
   
   public void run ()
   {
+	 int count = 0; 
 
      while (true)
      {
@@ -175,7 +172,17 @@ public class LineFollowerPID extends Thread
 	    			 Car.forward(powerA, powerC);
 	    		 else 
 	    			 Car.forward(powerC, powerA);
+		     
+		     // After a pause starts at reduced speed
+		     if (++count == 5)
+		     {
+		    	 // Accelerate to full speed
+		    	 if (Tp < Tp_saved) Tp = Tp + 1;
+		    	 count = 0;
+		     }
 	     }
+	     else
+	    	 count = 0;
     	 
 	     Thread.sleep(dT);  	 
 	     
