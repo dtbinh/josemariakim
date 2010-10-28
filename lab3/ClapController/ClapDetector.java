@@ -107,7 +107,7 @@ public class ClapDetector
 					LCD.clear();
 					LCD.drawString("State 1", 0, 0);
 					LCD.refresh();
-					state = 1; // Start again looking for clap
+					state = 1; // Timeout - Start again looking for clap
 				}
 				break;
 
