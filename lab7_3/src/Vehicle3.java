@@ -6,15 +6,17 @@ import lejos.nxt.*;
  * @author  Kim Bjerge
  * @version 01.10.2010
  */
-public class Vehicle2 implements ButtonListener 
+public class Vehicle3 implements ButtonListener 
 {
   private static int dT = 1000;   // seconds
   private boolean keepItRunning = true;
   private boolean stopped = false;
+  private static SoundCtrMotor leftSoundCtrMotor;
+  private static SoundCtrMotor rightSoundCtrMotor;
   private static LightCtrMotor leftLightCtrMotor;
   private static LightCtrMotor rightLightCtrMotor;
 
-  public Vehicle2() {
+  public Vehicle3() {
   }
 
   public void buttonPressed(Button b){
@@ -39,7 +41,6 @@ public class Vehicle2 implements ButtonListener
   
   public void run() throws Exception
   {
- 	 int time = 0; 
  	 Button.ESCAPE.addButtonListener(this);
  	 Button.ENTER.addButtonListener(this);
  	 Button.LEFT.addButtonListener(this);
@@ -47,9 +48,10 @@ public class Vehicle2 implements ButtonListener
      
  	 while (keepItRunning)
      {    	 
-	     LCD.drawInt(leftLightCtrMotor.getValue(),4,10,2);
-	     LCD.drawInt(rightLightCtrMotor.getValue(),4,10,3);
-	     LCD.drawInt(time++,4,10,4);
+	     LCD.drawInt(leftSoundCtrMotor.getValue(),4,10,2);
+	     LCD.drawInt(rightSoundCtrMotor.getValue(),4,10,3);
+	     LCD.drawInt(leftLightCtrMotor.getValue(),4,10,4);
+	     LCD.drawInt(rightLightCtrMotor.getValue(),4,10,5);
 	     LCD.refresh();     	     	     
 	     Thread.sleep(dT);
      }
@@ -66,25 +68,34 @@ public class Vehicle2 implements ButtonListener
 	 while (Button.ENTER.isPressed());
 	 LCD.drawString("Press ENTER     ", 0, 0);
 	 LCD.drawString("to start        ", 0, 1);
-	 LCD.drawString("vehicle2+3      ", 0, 2);
+	 LCD.drawString("vehicle3        ", 0, 2);
 	 while (!Button.ENTER.isPressed());
 
 	 LCD.clear();
 	 LCD.drawString("JoseMariaKim    ", 0, 0);
-	 LCD.drawString("Vehicle2+3      ", 0, 1);
-     LCD.drawString("LigthLeft:      ", 0, 2); 
-     LCD.drawString("LigthRight:     ", 0, 3); 
-     LCD.drawString("Time [sec]:     ", 0, 4); 
+	 LCD.drawString("Vehicle3        ", 0, 1);
+     LCD.drawString("leftSound:      ", 0, 2); 
+     LCD.drawString("rightSound:     ", 0, 3); 
+     LCD.drawString("leftLight:      ", 0, 4); 
+     LCD.drawString("rightLight:     ", 0, 5); 
   
-     leftLightCtrMotor = new LightCtrMotor(SensorPort.S2, MotorPort.C); 
+     leftSoundCtrMotor = new SoundCtrMotor(SensorPort.S2, MotorPort.B); 
+     leftSoundCtrMotor.setDaemon(true);
+     leftSoundCtrMotor.start();
+     
+     rightSoundCtrMotor = new SoundCtrMotor(SensorPort.S3, MotorPort.C); 
+     rightSoundCtrMotor.setDaemon(true);
+     rightSoundCtrMotor.start();
+     
+     leftLightCtrMotor = new LightCtrMotor(SensorPort.S1, MotorPort.B); 
      leftLightCtrMotor.setDaemon(true);
      leftLightCtrMotor.start();
      
-     rightLightCtrMotor = new LightCtrMotor(SensorPort.S3, MotorPort.B); 
+     rightLightCtrMotor = new LightCtrMotor(SensorPort.S4, MotorPort.C); 
      rightLightCtrMotor.setDaemon(true);
      rightLightCtrMotor.start();
-   	 
-     Vehicle2 vehicle = new Vehicle2();
+ 	 
+     Vehicle3 vehicle = new Vehicle3();
      vehicle.run();
      
    }

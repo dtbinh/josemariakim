@@ -6,14 +6,15 @@ import lejos.nxt.*;
  * @author  Kim Bjerge
  * @version 01.10.2010
  */
-public class Vehicle1 implements ButtonListener 
+public class Vehicle2 implements ButtonListener 
 {
   private static int dT = 1000;   // seconds
   private boolean keepItRunning = true;
   private boolean stopped = false;
-  private static SoundCtrMotor soundCtrMotor;
+  private static LightCtrMotor leftLightCtrMotor;
+  private static LightCtrMotor rightLightCtrMotor;
 
-  public Vehicle1() {
+  public Vehicle2() {
   }
 
   public void buttonPressed(Button b){
@@ -46,8 +47,9 @@ public class Vehicle1 implements ButtonListener
      
  	 while (keepItRunning)
      {    	 
-	     LCD.drawInt(soundCtrMotor.getValue(),4,10,2);
-	     LCD.drawInt(time++,4,10,3);
+	     LCD.drawInt(leftLightCtrMotor.getValue(),4,10,2);
+	     LCD.drawInt(rightLightCtrMotor.getValue(),4,10,3);
+	     LCD.drawInt(time++,4,10,4);
 	     LCD.refresh();     	     	     
 	     Thread.sleep(dT);
      }
@@ -64,20 +66,25 @@ public class Vehicle1 implements ButtonListener
 	 while (Button.ENTER.isPressed());
 	 LCD.drawString("Press ENTER     ", 0, 0);
 	 LCD.drawString("to start        ", 0, 1);
-	 LCD.drawString("vehicle1        ", 0, 2);
+	 LCD.drawString("vehicle2+3      ", 0, 2);
 	 while (!Button.ENTER.isPressed());
 
 	 LCD.clear();
 	 LCD.drawString("JoseMariaKim    ", 0, 0);
-	 LCD.drawString("Vehicle1        ", 0, 1);
-     LCD.drawString("Sound:          ", 0, 2); 
-     LCD.drawString("Time [sec]:     ", 0, 3); 
+	 LCD.drawString("Vehicle2+3      ", 0, 1);
+     LCD.drawString("LigthLeft:      ", 0, 2); 
+     LCD.drawString("LigthRight:     ", 0, 3); 
+     LCD.drawString("Time [sec]:     ", 0, 4); 
   
-	 soundCtrMotor = new SoundCtrMotor(SensorPort.S1, MotorPort.C, MotorPort.B); 
-     soundCtrMotor.setDaemon(true);
-     soundCtrMotor.start();
+     leftLightCtrMotor = new LightCtrMotor(SensorPort.S1, MotorPort.C); 
+     leftLightCtrMotor.setDaemon(true);
+     leftLightCtrMotor.start();
+     
+     rightLightCtrMotor = new LightCtrMotor(SensorPort.S4, MotorPort.B); 
+     rightLightCtrMotor.setDaemon(true);
+     rightLightCtrMotor.start();
    	 
-     Vehicle1 vehicle = new Vehicle1();
+     Vehicle2 vehicle = new Vehicle2();
      vehicle.run();
      
    }

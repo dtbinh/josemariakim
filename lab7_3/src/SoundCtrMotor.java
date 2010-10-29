@@ -23,14 +23,12 @@ public class SoundCtrMotor extends Thread
                            stop     = 3;
  
   private SoundSensor sound;
-  private MotorPort motor1;
-  private MotorPort motor2;
+  private MotorPort motor;
 
-  public SoundCtrMotor(SensorPort p, MotorPort m1, MotorPort m2) {
+  public SoundCtrMotor(SensorPort p, MotorPort m) {
 	  
 	  sound = new SoundSensor(p);
-	  motor1 = m1;
-	  motor2 = m2;
+	  motor = m;
   }
   
   public int getValue(){
@@ -46,8 +44,7 @@ public class SoundCtrMotor extends Thread
        try  {
          
     	 read = sound.readValue();
- 	     motor1.controlMotor(read, forward);
- 	     motor2.controlMotor(read, forward);
+ 	     motor.controlMotor(read, forward);
  	     
  	     Thread.sleep(dT);  	 
 	     
