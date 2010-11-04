@@ -1,4 +1,5 @@
 import lejos.nxt.*;
+import lejos.nxt.addon.RCXLightSensor;
 /**
  * Light follower behavior
  * 
@@ -8,37 +9,41 @@ import lejos.nxt.*;
 
 public class LightFollower extends Behavior {
 
-	private LightControlMotor leftLightCtrMotor;
-	private LightControlMotor rightLightCtrMotor;
+	private RCXLightSensor leftLight;
+	private RCXLightSensor rightLight;
 	private int lightThreshold = 35;
 	
 	public LightFollower(String name, int LCDrow, Behavior subsumedBehavior) 
 	{
 		super(name, LCDrow, subsumedBehavior);
-		leftLightCtrMotor = new LightControlMotor(SensorPort.S2, MotorPort.C);
-		rightLightCtrMotor = new LightControlMotor(SensorPort.S3, MotorPort.B);
+		leftLight = new RCXLightSensor(SensorPort.S2);
+		leftLight.setFloodlight(true);
+		rightLight = new RCXLightSensor(SensorPort.S3);
+		rightLight.setFloodlight(true);
 		
 	}
 
 	public void run() {
-		while(leftLightCtrMotor.getValue() < lightThreshold
-				&& rightLightCtrMotor.getValue() < lightThreshold){
+		while(true){
+		while(leftLight.readValue() < lightThreshold
+				&& rightLight.readValue() < lightThreshold){
 			//only display the value if we don't detect a light source
 			String message = getStatusMessage();			
 			drawString(message);
 			
 		}
 		suppress();
-		leftLightCtrMotor.reactOnLight();
-		rightLightCtrMotor.reactOnLight();
+		int leftPower = leftLight.readValue() + 30;
+		int rightPower = rightLight.readValue() + 30;
+		forward(leftPower, rightPower);
 		drawString("Driving to the light...");
 		delay(1000);
 		release();
+		}
 	}
 
 	private String getStatusMessage() {
-		return "l = " + leftLightCtrMotor.getValue() 
-		+ "- r = " + rightLightCtrMotor.getValue();
+		return leftLight.readValue()+ "-" + rightLight.readValue();
 	}
 
 	
