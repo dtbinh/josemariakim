@@ -11,7 +11,7 @@ public class LightFollower extends Behavior {
 
 	private RCXLightSensor leftLight;
 	private RCXLightSensor rightLight;
-	private int lightThreshold = 35;
+	private int lightThreshold = 21;
 	
 	public LightFollower(String name, int LCDrow, Behavior subsumedBehavior) 
 	{
@@ -33,11 +33,13 @@ public class LightFollower extends Behavior {
 			
 		}
 		suppress();
-		int leftPower = leftLight.readValue() + 30;
-		int rightPower = rightLight.readValue() + 30;
+		int leftPower = leftLight.readValue() + 50;
+		int rightPower = rightLight.readValue() + 50;
 		forward(leftPower, rightPower);
-		drawString("Driving to the light...");
-		delay(1000);
+		String message = getStatusMessage();			
+		drawString(message);
+		delay(1500);
+		stop();
 		release();
 		}
 	}
