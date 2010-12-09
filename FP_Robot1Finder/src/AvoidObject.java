@@ -7,12 +7,12 @@ import lejos.nxt.*;
  */
 public class AvoidObject extends Behavior 
 {    
-    private UltrasonicSensor us ;
+    private SyncUltrasonicSensor us ;
            
-    public AvoidObject( String name, int LCDrow, Behavior b, UltrasonicSensor uSensor)
+    public AvoidObject( String name, int LCDrow, Behavior b, SyncUltrasonicSensor uSensor)
     {
     	super(name, LCDrow, b);
-        us = uSensor;
+        this.us = uSensor;
     }
     
     public void run() 
@@ -20,13 +20,15 @@ public class AvoidObject extends Behavior
         int distance;
         
         while (true)
-        {
-	    	
+        {	    	
+        	 
             distance = us.getDistance();
+        	 
             while ( distance > tooCloseThreshold )
             {
                 drawInt(distance);
-       		    delay(10);
+       		    delay(5);
+                distance = us.getDistance();
             }
 
             // When robot is too close an object
@@ -40,11 +42,11 @@ public class AvoidObject extends Behavior
 
             backward();
             drawString("b");
-            delay(1000);
+            delay(500);
 		    
-            rotateTo(45);
+            rotate(45);
             drawString("r");
-            delay(500); 
+            delay(100); 
 		    
             stop();
             drawString("s");

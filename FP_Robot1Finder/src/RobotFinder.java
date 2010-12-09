@@ -17,20 +17,22 @@ public class RobotFinder
     	SenseIdentifyObject sio;
     	PlaySound ps;
     	
-    	UltrasonicSensor us =  new UltrasonicSensor(SensorPort.S1);
+    	SyncUltrasonicSensor us =  new SyncUltrasonicSensor(SensorPort.S1);
  	    LightSensor ls = new LightSensor(SensorPort.S2);
  	    ColorSensor cs = new ColorSensor(SensorPort.S3);
-	    ls.setFloodlight(true);		
+	    ls.setFloodlight(true);	
+	    Car.InitCar();
 	
         LCD.drawString("Robot 1 finder",0,0);
         LCD.refresh();
     	
         // Subsumption architecture with levels of behavioral competences
-        mf = new MoveForward("Forward", 1, null);
-    	tb = new TurnAtBoarder ("Turn", 2, mf, ls);
-    	ao = new AvoidObject("Avoid", 3, tb, us);
-    	sio = new SenseIdentifyObject("Identify", 4, ao, cs, us);
-        ps = new PlaySound("Play", 5, null, us);
+        mf = new MoveForward  ("Forward ", 1, null);
+    	tb = new TurnAtBoarder("Turn    ", 2, mf, ls);
+    	ao = new AvoidObject  ("Avoid   ", 3, tb, us);
+    	sio = new SenseIdentifyObject
+    	                      ("Identify", 4, ao, cs, us);
+        ps = new PlaySound    ("Play    ", 5, null, us);
     	
     	mf.start();
     	tb.start();

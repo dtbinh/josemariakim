@@ -14,26 +14,35 @@ public class SenseIdentifyObject extends Behavior
     private final int maxMarks = 10;
     private int idx = 0;
     private Pose[] landmarks;
-	private UltrasonicSensor us;
+	private SyncUltrasonicSensor us;
 	private ColorSensor cs;
   
-    public SenseIdentifyObject( String name, int LCDrow, Behavior b, ColorSensor sColor, UltrasonicSensor sSonic)
+    public SenseIdentifyObject( String name, int LCDrow, Behavior b, ColorSensor sColor, SyncUltrasonicSensor sSonic)
     {
     	super(name, LCDrow, b);
-    	cs = sColor;
-    	us = sSonic;
-    	landmarks = new Pose[maxMarks];
+    	this.cs = sColor;
+    	this.us = sSonic;
+    	this.landmarks = new Pose[maxMarks];
     }
     	
-    public void addPose(Pose p)
+    public void dispPose(Pose p)
     {
     	String msg;
+    	int x, y, head;
+		x = (int)p.getX();
+		y = (int)p.getY();
+		head = (int)p.getHeading();
+    	msg = x + "," + y + "," + head;
+        LCD.drawString(msg, 0, 6);	    	    	
+    }
+    
+    public void addPose(Pose p)
+    {
     	// Add new landmark found
     	if (idx < maxMarks)
     	{
     		landmarks[idx++] = p;
-	    	msg =   p.getX() + "," + p.getY() + "," + p.getHeading();
-	    	drawString(msg);
+    		dispPose(p);
     	}
     }
     
@@ -45,7 +54,8 @@ public class SenseIdentifyObject extends Behavior
     	{     		
       	   while (cs.getColorNumber() != color_val)
       	   {
-     		   delay(10);
+     		   delay(100);
+     		   dispPose(Car.getPose());
       	   }
       	   
       	   // When color area is detected robot
@@ -58,9 +68,12 @@ public class SenseIdentifyObject extends Behavior
 	    	    stop();
 	            // Save location 
 	            addPose(Car.getPose());
+                Sound.playTone(800, 2000, 50);
 	            delay(10000);
 	            release(); 
            }
+           delay(100);
+ 		   dispPose(Car.getPose());
     	}
     }   
 }

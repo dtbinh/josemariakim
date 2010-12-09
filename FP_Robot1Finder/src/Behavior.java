@@ -17,9 +17,9 @@ import lejos.nxt.LCD;
  */
 public class Behavior extends Thread 
 {
-    protected final int closeThreshold = 40; // cm
-    protected final int foundThreshold = 30; // cm
-    protected final int tooCloseThreshold = 20; // cm
+    protected final int closeThreshold = 25; // cm
+    protected final int foundThreshold = 20; // cm
+    protected final int tooCloseThreshold = 15; // cm
 
     private String name;
     private int LCDrow;
@@ -86,9 +86,9 @@ public class Behavior extends Thread
     	if ( ! isSuppressed() ) Car.stop(); 
     }
 
-    public void rotateTo(int angle)
+    public void rotate(int angle)
     {
-    	if ( ! isSuppressed() ) Car.rotateTo(angle); 
+    	if ( ! isSuppressed() ) Car.rotate(angle); 
     }
 
   

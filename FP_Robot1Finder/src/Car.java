@@ -18,6 +18,12 @@ public class Car
     private Car()
     {	   
     } 
+    
+    public static void InitCar()
+    {
+		robot.setMoveSpeed(250);
+		robot.setTurnSpeed(100);
+    }
    
     public static Pose getPose()
     {
@@ -40,8 +46,8 @@ public class Car
    		robot.backward();
     }
 
-    public static void rotateTo(int angle)
+    public static void rotate(int angle)
     {
-		robot.rotateTo(angle);
+		robot.rotate(angle);
     }
 }

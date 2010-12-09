@@ -12,13 +12,12 @@ public class PlaySound extends Behavior
     private int freq = 10;
     private int puls = 0;
 
-    private UltrasonicSensor us ;
-    private int distance;
+    private SyncUltrasonicSensor us ;
            
-    public PlaySound( String name, int LCDrow, Behavior b, UltrasonicSensor uSensor)
+    public PlaySound( String name, int LCDrow, Behavior b, SyncUltrasonicSensor uSensor)
     {
     	super(name, LCDrow, b);
-        us = uSensor;
+        this.us = uSensor;
     }
    
     public void PlaySong()
@@ -42,18 +41,19 @@ public class PlaySound extends Behavior
     }
     
     public void run() 
-    {
+    { 
+    	int distance;
+    	
         while (true)
         {
-	    	
             distance = us.getDistance();
             if ( distance < closeThreshold )
             {
                 suppress();
             	PlaySong();
-                delay(2000);   			  
                 release();	
             }
+            delay(1000);   			  
        }
     }
 }
