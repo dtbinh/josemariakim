@@ -54,7 +54,7 @@ public class SenseIdentifyObject extends Behavior
     	{     		
       	   while (cs.getColorNumber() != color_val)
       	   {
-     		   delay(100);
+     		   delay(5);
      		   //dispPose(Car.getPose());
       	   }
       	   
@@ -72,7 +72,7 @@ public class SenseIdentifyObject extends Behavior
                	delay(60000);
                 release(); 
            }
-           delay(100);
+           delay(5);
  		   //dispPose(Car.getPose());
     	}
     }   
