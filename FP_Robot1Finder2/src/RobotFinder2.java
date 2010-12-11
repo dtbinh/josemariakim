@@ -23,7 +23,7 @@ public class RobotFinder2
 	    ls.setFloodlight(true);	
 	    Car.InitCar();
 	
-        LCD.drawString("Robot 1 finder",0,0);
+        LCD.drawString("Robot 1 finder 2",0,0);
         LCD.refresh();
     	
         // Subsumption architecture with levels of behavioral competences

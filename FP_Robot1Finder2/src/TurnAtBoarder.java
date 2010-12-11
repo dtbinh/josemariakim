@@ -10,7 +10,7 @@ public class TurnAtBoarder extends Behavior {
 
 	private final int lightThreshold = 40; // Black ~34
 	private final int angleDefault = 170; // Turn angle in search for object
-	private boolean rotateLeft = true;
+	private boolean rotateLeft = false;
 	private int rotateAngle = angleDefault;
 	private LightSensor ls;
 	
@@ -43,11 +43,7 @@ public class TurnAtBoarder extends Behavior {
 			// it turns to search for object in a new direction. 
 			// Turn either +/- 160 degrees
 			suppress();
-			if (rotateLeft) 
-				rotate(-rotateAngle);
-			else
-				rotate(rotateAngle);
-
+			
 			if (++countBoarderSeen < 2)
 			{
 				// Default turn behavior
@@ -59,6 +55,12 @@ public class TurnAtBoarder extends Behavior {
 				// If robot got stuck in a corner only turn 90 degrees
 				rotateAngle = 90;
 			}
+
+			if (rotateLeft) 
+				rotate(-rotateAngle);
+			else
+				rotate(rotateAngle);
+
 			
 			message = getStatusMessage();			
 			drawString(message);

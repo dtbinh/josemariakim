@@ -69,7 +69,7 @@ public class SenseIdentifyObject extends Behavior
 	            // Save location 
 	            addPose(Car.getPose());
                 Sound.playTone(800, 2000, 50);
-               	delay(60000);
+               	delay(30000);
                 release(); 
            }
            delay(5);
