@@ -13,7 +13,7 @@ public class Sejway
 	
 	// Global vars:
 	int offset;
-	int prev_error;
+	float prev_error;
 	float int_error;
 	
 	LightSensor ls;
@@ -40,18 +40,18 @@ public class Sejway
 			int normVal = ls.readNormalizedValue();
 			
 			// Proportional Error:
-			int error = normVal - offset;
-			// Adjust far and near ligth readings:
+			float error = normVal - offset;
+			// Adjust far and near light readings:
 			if (error < 0) error = (int)(error * 1.8F);
 			
 			// Integral Error:
 			int_error = ((int_error + error) *2)/3;
 			
 			// Derivative Error:
-			int deriv_error = error - prev_error;
+			float deriv_error = error - prev_error;
 			prev_error = error;
 			
-			int pid_val = (int)(KP * error + KI * int_error + KD * deriv_error) / SCALE;
+			float pid_val = (int)(KP * error + KI * int_error + KD * deriv_error) / SCALE;
 			
 			if (pid_val > 100)
 				pid_val = 100;
@@ -59,11 +59,11 @@ public class Sejway
 				pid_val = -100;
 			
 			// Power derived from PID value:
-			int power = Math.abs(pid_val);
+			float power = Math.abs(pid_val);
 			power = 55 + (power * 45) / 100; // NORMALIZE POWER
 			
-			Motor.B.setPower(power);
-			Motor.C.setPower(power);
+			Motor.B.setPower((int) power);
+			Motor.C.setPower((int) power);
 			
 			if (pid_val > 0) {
 				Motor.B.forward();

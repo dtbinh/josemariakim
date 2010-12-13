@@ -12,12 +12,11 @@ import lejos.nxt.addon.RCXLightSensor;
  * motor to port B.
  * 
  * @author  Kim Bjerge
- * @version 01.10.2010
+ * @version 04.10.2010
  */
 
-public class LightCtrMotor extends Thread
+public class LightCtrMotor
 {
-  private final int dT = 10;   // ms
 
   // Commands for the motors
   private final static int forward  = 1,
@@ -38,25 +37,14 @@ public class LightCtrMotor extends Thread
 	  motor = m;
   }
   
-  public int getValue(){
+  @SuppressWarnings("deprecation")
+public int getValue(){
 	  return light.readValue();
   }
   
-  public void run ()
-  {
-	 int read; 
+void reactOnLight() {
+	int read = light.readValue(); // Values in between 28 - 51 (light)
+	motor.controlMotor(read + 30, forward); // Add offset
+}
 
-     while (true)
-     {
-       try  {
-         
-    	 read = light.readValue(); // Values in between 28 - 51 (light)
- 	     motor.controlMotor(read+30, forward); // Add offset 
- 	     
- 	     Thread.sleep(dT);  	 
-	     
-       } catch (InterruptedException ie)  {	   
-       }   
-     }     
-   }
 }

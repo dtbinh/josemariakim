@@ -79,8 +79,8 @@ public class LightCtrMotor extends Thread
        try  {
          
     	 read = light.readValue(); // Values in between 28 - 51 (light)
-	     //updateMinMax(read);
-	     updateFilteredMinMax(read);
+	     updateMinMax(read);
+	     //updateFilteredMinMax(read);
     	 read = normalize(read);
 	     motor.controlMotor(read+min_power, forward); // Add offset 
  	     

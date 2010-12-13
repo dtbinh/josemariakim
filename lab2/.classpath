@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="beam"/>
 	<classpathentry kind="src" path="wallfollow"/>
-	<classpathentry kind="lib" path="C:/Programmer/leJOS NXJ/lib/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/leJOS NXJ/lib/classes.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
