@@ -12,7 +12,6 @@ public class FindObject extends Behavior {
 	private RCXLightSensor leftLight;
 	private RCXLightSensor rightLight;
 	private PIDControl pidControl;
-	//private int lightThreshold = 21;
 	
 	public FindObject(String name, int LCDrow, Behavior subsumedBehavior) 
 	{
@@ -21,8 +20,7 @@ public class FindObject extends Behavior {
 		leftLight.setFloodlight(true);
 		rightLight = new RCXLightSensor(SensorPort.S3);
 		rightLight.setFloodlight(true);
-		pidControl = new PIDControl (leftLight, rightLight);
-		
+		pidControl = new PIDControl (leftLight, rightLight);	
 	}
 
 	public void Calibrate()
@@ -32,18 +30,6 @@ public class FindObject extends Behavior {
 	
 	public void run() {
 		while(true){
-			/*
-			while(leftLight.getLightValue() < lightThreshold
-					&& rightLight.getLightValue() < lightThreshold){
-				//only display the value if we don't detect a light source
-				String message = getStatusMessage();			
-				drawString(message);
-				
-			}
-			*/
-			
-			//int leftPower = leftLight.getLightValue() + 50;
-			//int rightPower = rightLight.getLightValue() + 55;
 			
 			String message = getStatusMessage();			
 			drawString(message);

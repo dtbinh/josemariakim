@@ -13,14 +13,14 @@ public class PIDControl
   // Configuration values
   private final int max_power = 100;
   private final int min_power = 40;
-  private final int default_Tp = 70;
-  private int Tp = 70;  // default forward power
+  private final int default_Tp = 65;
+  private int Tp = 65;  // default forward power
     
   // Computed constants, OK
   private int offset = 0;
   private float Kp =  4.00F;
-  private float Ki =  0.04F;
-  private float Kd = 100.00F;
+  private float Ki =  0.03F;
+  private float Kd = 75.00F;
 
   // Variables
   private float integral = 0;

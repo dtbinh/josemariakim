@@ -4,14 +4,16 @@ public class Robot2Gripper
 {
     public static void main(String [] args)
     {    	
-    	AvoidFront af;
+    	GripObject go;
     	FindObject fo;
+		Motor gripper = Motor.A;
+		UltrasonicSensor us = new UltrasonicSensor(SensorPort.S1);
     	
         LCD.drawString("Robot 2 Gripper",0,0);
         LCD.refresh();
     	
         fo = new FindObject("Find", 3, null);
-    	af = new AvoidFront ("Avoid", 5,fo);
+    	go = new GripObject ("Avoid", 4, fo, us, gripper);
 
 		while (Button.ENTER.isPressed());	
     	LCD.drawString("Press ENTER to  ", 0, 0);
@@ -19,15 +21,22 @@ public class Robot2Gripper
 		while (!Button.ENTER.isPressed())
 			fo.Calibrate(); 
 		
-    	LCD.clearDisplay();
+    	go.liftGripArm();
+
+        while (Button.ENTER.isPressed());	
+    	LCD.drawString("Press ENTER to  ", 0, 0);
+		LCD.drawString("start       ", 0, 1);
+		while (!Button.ENTER.isPressed()); 
+
+		LCD.clearDisplay();
         LCD.drawString("Robot 2 Gripper",0,0);
     	
-       	af.start();
+        go.start();
 		fo.start();
 
     	while (! Button.ESCAPE.isPressed())
     	{
-    		af.reportState();
+    		go.reportState();
     		fo.reportState();
     	}
     	
