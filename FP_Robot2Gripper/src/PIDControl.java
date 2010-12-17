@@ -16,9 +16,9 @@ public class PIDControl
   private final int default_Tp = 65;
   private int Tp = 65;  // default forward power
     
-  // Computed constants, OK
+  // Constants reused from lab session 5
   private int offset = 0;
-  private float Kp =  4.00F;
+  private float Kp =  5.0F; // 4-6 best
   private float Ki =  0.03F;
   private float Kd = 75.00F;
 

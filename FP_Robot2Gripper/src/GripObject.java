@@ -54,7 +54,7 @@ public class GripObject extends Behavior
             
             // Moves a bit forward
             forward(60,60);
-            delay(500);
+            delay(300);
             
             // Stop and grip object
             stop();
