@@ -48,6 +48,7 @@ public class Car
     {
     	// Steer values between -200 to 200 thats why multiply by two
     	robot.steer((leftPower - rightPower)*2);
+    	//robot.updatePose();
     	// Steer method replaces
 	    // leftMotor.controlMotor(leftPower,forward);
 	    // rightMotor.controlMotor(rightPower,forward);
@@ -68,9 +69,19 @@ public class Car
    		robot.backward();
     }
 
+    public static synchronized void goTo(int x, int y, boolean imediateReturn)
+    {
+		robot.goTo(x, y, imediateReturn);
+    }
+
     public static synchronized void rotate(int angle, boolean imediateReturn)
     {
 		robot.rotate(angle, imediateReturn);
+    }
+
+    public static synchronized void rotateTo(int angle, boolean imediateReturn)
+    {
+		robot.rotateTo(angle, imediateReturn);
     }
     
     public static boolean isMoving()

@@ -12,8 +12,8 @@ import lejos.nxt.LCD;
  * behavior has a name and a row number ( 1-7 ) so the state can be 
  * reported to the LCD on different rows.
  *  
- * @author  Ole Caprani
- * @version 23.08.08
+ * @author  Ole Caprani modified by Kim Bjerge
+ * @version 25.12.10
  */
 public class Behavior extends Thread 
 {
@@ -92,6 +92,16 @@ public class Behavior extends Thread
     	if ( ! isSuppressed() ) rotate(angle, false);
     }
 
+    public void goTo(int x, int y,  boolean imediateReturn)
+    {
+    	if ( ! isSuppressed() ) Car.goTo(x, y, imediateReturn); 
+    }
+
+    public void rotateTo(int angle, boolean imediateReturn)
+    {
+    	if ( ! isSuppressed() ) Car.rotateTo(angle, imediateReturn); 
+    }
+    
     public void rotate(int angle, boolean imediateReturn)
     {
     	if ( ! isSuppressed() ) Car.rotate(angle, imediateReturn); 

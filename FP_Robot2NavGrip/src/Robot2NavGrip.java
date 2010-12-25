@@ -4,18 +4,20 @@ public class Robot2NavGrip
 {
     public static void main(String [] args)
     {    	
-    	GripObject go;
+    	//GripObject go;
+    	SeqStrategy ss;
     	FindObject fo;
 		Motor gripper = Motor.A;
 		UltrasonicSensor us = new UltrasonicSensor(SensorPort.S1);
 		
 		Car.InitCar();
     	
-        LCD.drawString("Robot 2 Gripper",0,0);
+        LCD.drawString("Robot 2 NavGrip",0,0);
         LCD.refresh();
     	
         fo = new FindObject("Find", 3, null);
-    	go = new GripObject ("Avoid", 4, fo, us, gripper);
+    	//go = new GripObject ("Avoid", 4, fo, us, gripper);
+    	ss = new SeqStrategy ("Sequence", 4, fo, us, gripper);
 
 		while (Button.ENTER.isPressed());	
     	LCD.drawString("Press ENTER to  ", 0, 0);
@@ -23,7 +25,7 @@ public class Robot2NavGrip
 		while (!Button.ENTER.isPressed())
 			fo.Calibrate(); 
 		
-    	go.liftGripArm();
+    	ss.liftGripArm();
 
         while (Button.ENTER.isPressed());	
     	LCD.drawString("Press ENTER to  ", 0, 0);
@@ -31,14 +33,14 @@ public class Robot2NavGrip
 		while (!Button.ENTER.isPressed()); 
 
 		LCD.clearDisplay();
-        LCD.drawString("Robot 2 Gripper",0,0);
+        LCD.drawString("Robot 2 NavGrip",0,0);
     	
-        go.start();
+        ss.start();
 		fo.start();
 
     	while (! Button.ESCAPE.isPressed())
     	{
-    		go.reportState();
+    		ss.reportState();
     		fo.reportState();
     	}
 
