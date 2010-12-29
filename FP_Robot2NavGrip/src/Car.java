@@ -24,7 +24,7 @@ public class Car
     public static synchronized void InitCar()
     {
 	   	robot.setMoveSpeed(150);
-    	robot.setTurnSpeed(100);
+    	robot.setTurnSpeed(80);
     }
     
     public static synchronized void setDefaultSpeed()

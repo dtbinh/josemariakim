@@ -6,11 +6,11 @@
 x = 702;
 y = abs(-156);
 %head = -171;
-head = -180;
+%head = -180;
 %head = 45;
 %head = -45;
 %head = 135;
-%head = -135;
+head = -135;
 r = 20;
 
 %if (a >= 0) && (a < 90) % A

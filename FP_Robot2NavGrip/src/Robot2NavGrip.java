@@ -18,6 +18,7 @@ public class Robot2NavGrip
         fo = new FindObject("Find", 3, null);
     	//go = new GripObject ("Avoid", 4, fo, us, gripper);
     	ss = new SeqStrategy ("Sequence", 4, fo, us, gripper);
+    	//ss.WaitForObjLocation(); // Testing ObjectLocation class
 
 		while (Button.ENTER.isPressed());	
     	LCD.drawString("Press ENTER to  ", 0, 0);

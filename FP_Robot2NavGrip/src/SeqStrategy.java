@@ -1,4 +1,5 @@
 import lejos.nxt.*;
+import lejos.robotics.Pose;
 /**
  * A behavior that uses a sequential strategy moving to the position
  * of the object location found by robot #1
@@ -44,11 +45,31 @@ public class SeqStrategy extends Behavior
 		return false;
 	}
    
-    private void WaitForObjLocation()
+    public void WaitForObjLocation()
     {
+    	// Simulate pose received from robot #1
+    	ObjectLocation objLoc = new ObjectLocation(702, -156, -171, 20);
+    	
+    	// Test of object location class
+    	//ObjectLocation objLoc = new ObjectLocation(702, -156, 45, 20);
+    	//ObjectLocation objLoc = new ObjectLocation(702, -156, 135, 20);
+    	//ObjectLocation objLoc = new ObjectLocation(702, -156, -45, 20);
+    	//ObjectLocation objLoc = new ObjectLocation(702, -156, -135, 20);
+    	
+    	// Convert robot #1 position to location for robot #2
+    	Pose robot2pose = objLoc.GetRobot2Pose();
+    	x_loc = Math.round(robot2pose.getX());
+    	y_loc = Math.round(robot2pose.getY());
+    	head = Math.round(robot2pose.getHeading());   
+    	
+    	// Display robot #2 pose
+    	String msg = x_loc + "," + y_loc + "," + head;
+        LCD.drawString(msg, 0, 7);	    	    	
+    	/*
     	x_loc = 602;
     	y_loc = -260;
-    	head = -15;	
+    	head = -15;
+    	*/
     }
 
     private void MoveToOjbLocation()
@@ -70,7 +91,7 @@ public class SeqStrategy extends Behavior
         // Moves a bit forward
         drawString("f");
         forward();
-        delay(300);
+        delay(400);
         
         // Stop and grip object
         stop();
