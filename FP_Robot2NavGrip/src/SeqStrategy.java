@@ -48,7 +48,8 @@ public class SeqStrategy extends Behavior
     public void WaitForObjLocation()
     {
     	// Simulate pose received from robot #1
-    	ObjectLocation objLoc = new ObjectLocation(702, -156, -171, 20);
+    	//ObjectLocation objLoc = new ObjectLocation(702, -156, -171, 20);
+    	ObjectLocation objLoc = new ObjectLocation(666, -153, -166, 200);
     	
     	// Test of object location class
     	//ObjectLocation objLoc = new ObjectLocation(702, -156, 45, 20);
