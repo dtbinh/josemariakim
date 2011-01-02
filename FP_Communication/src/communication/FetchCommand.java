@@ -1,3 +1,5 @@
+package communication;
+
 
 public class FetchCommand extends Command {
 

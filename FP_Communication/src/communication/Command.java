@@ -1,3 +1,5 @@
+package communication;
+
 
 import java.util.*;
 import lejos.nxt.*;
@@ -21,6 +23,7 @@ public class Command
 	{
 		this(null);
 	}
+	
  	public void Deserialize(String frame)
  	{
  		if(logging) this.dataLogger.writeLine("Parsing the command");

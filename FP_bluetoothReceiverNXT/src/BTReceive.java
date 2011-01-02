@@ -1,7 +1,11 @@
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
 import java.io.*;
-import java.util.*;
+
+import communication.Command;
+import communication.DataLogger;
+import communication.Utils;
+
 
 /**
  * Receive data from another NXT, a PC, a phone, 
@@ -13,53 +17,52 @@ import java.util.*;
  */
 public class BTReceive {
 
-	private static String fileName = "testlog1.txt";
+	private static String filePrefix = "receiverLog";
 	public static void main(String [] args)  throws Exception 
 	{
 		String connected = "Connected";
         String waiting = "Waiting...";
         String closing = "Closing...";
         
-        
+        String fileName = Utils.getFileName(filePrefix);
         DataLogger logger = new DataLogger(fileName);
 		
-		LCD.drawString(waiting,0,0);
-		LCD.refresh();
+        Utils.writeUpperLineToLCD(waiting);
 		logger.writeLine(waiting);
 
         BTConnection btc = Bluetooth.waitForConnection();
         
-		LCD.clear();
-		LCD.drawString(connected,0,0);
-		LCD.refresh();	
+        Utils.writeUpperLineToLCD(connected);
+        
 		logger.writeLine(connected);
 		
 		DataInputStream dis = btc.openDataInputStream();
 		DataOutputStream dos = btc.openDataOutputStream();
 		
-		String commandString = "";
-		char c = dis.readChar();
-		while(c!='\n'){
-			commandString += c;
-			c = dis.readChar();
-		}
-		
-		if(commandString.length() > 0)
+		for(int i = 0; i<10; i++)
 		{
-			String line = "Command received: " + commandString;
-			logger.writeLine(line);
+			String commandString = Utils.receive(dis);
+					
+			if(commandString.length() > 0)
+			{
+				logger.logReceived(commandString);
+				
+				Utils.writeUpperLineToLCD("Parsing the command");
+				
+				Command command = new Command();
+				command.Deserialize(commandString);
+					
+				Utils.writeUpperLineToLCD("Command parsed");
+				
+				String ack = "ACK\n";
+				Utils.send(dos, ack);
+				logger.logSent(ack);
+			}
+			else
+			{
+				logger.logReceived("null");
+			}
 		}
-		
-		LCD.drawString("Parsing the command", 0, 0);
-		Command command = new Command(null);
-		command.Deserialize(commandString);
-		
-		logger.writeLine(command.toString());
-		
-		LCD.drawString("Command parsed", 0, 0);
-		LCD.refresh();
-		dos.writeChars("ACK\n");
-		dos.flush();
 		
 		dis.close();
 		dos.close();
@@ -68,12 +71,12 @@ public class BTReceive {
 		logger.close();
 		while (! Button.ESCAPE.isPressed()){}
 		
-		LCD.clear();
-		LCD.drawString(closing,0,0);
-		LCD.refresh();
+		Utils.writeUpperLineToLCD(closing);
+		
 		btc.close();
 		LCD.clear();
 		
 	}
+	
 }
 

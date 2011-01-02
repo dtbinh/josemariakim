@@ -1,117 +1,128 @@
 import java.io.IOException;
-
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
 import java.io.*;
 import javax.bluetooth.*;
 
+import communication.DataLogger;
+import communication.FetchCommand;
+import communication.Utils;
+
 /**
  * 
  * Test of NXT to NXT Bluetooth comms.
  * 
- * Connects to another NXT, sends 100 ints, and receives the 
- * replies. Then closes the connection and shuts down.
- * 
- * Works with the BTReceive sample running on the slave NXT.
- * 
- * Change the name string to the name of your slave NXT, and make sure
- * it is in the known devices list of the master NXT. To do this, turn
- * on the slave NXT and make sure Bluetooth is on and the device
- * is visible. Use the Bluetooth menu on the slave for this. Then,
- * on the master, select the Bluetooth menu and then select Search.
- * The name of the slave NXT should appear. Select Add to add
- * it to the known devices of the master. You can check this has
- * been done by selecting Devices from the Bluetooth menu on the
- * master.
- * 
- * @author Lawrie Griffiths
  *
  */
 public class BTConnectTest {
+	
+	private static String filePrefix = "senderLog";
 	public static void main(String[] args) throws Exception {
-		String name1 = "Robot1";
-		String name2 = "Robot2";
-		String name3 = "NXT";
-		String name = "";
-		LCD.drawString("Connecting...", 0, 0);
-		LCD.refresh();
 		
-		RemoteDevice btrd = Bluetooth.getKnownDevice(name1);
-		if (btrd == null) {
-			btrd = Bluetooth.getKnownDevice(name2);
-		}
-		if (btrd == null) {
-			btrd = Bluetooth.getKnownDevice(name3);
-		}
-		
-		if (btrd == null) {
-			
-			LCD.clear();
-			LCD.drawString("No such device", 0, 0);
-			LCD.refresh();
-			Thread.sleep(2000);
-			System.exit(1);
-		}
-		
-		BTConnection btc = Bluetooth.connect(btrd);
-		
-		if (btc == null) {
-			LCD.clear();
-			LCD.drawString("Connect fail", 0, 0);
-			LCD.refresh();
-			Thread.sleep(2000);
-			System.exit(1);
-		}
-		
-		LCD.clear();
-		LCD.drawString("Connected", 0, 0);
-		LCD.refresh();
+		String fileName = Utils.getFileName(filePrefix);
+        DataLogger logger = new DataLogger(fileName);       
+        
+        logger.writeLine("Connecting...");
+        BTConnection btc = connectBluetooth(logger);
 		
 		DataInputStream dis = btc.openDataInputStream();
 		DataOutputStream dos = btc.openDataOutputStream();
 		
-		FetchCommand fetchCommand = new FetchCommand(3, (float)25.46, (float)2.6, (float)6.75, 3); 
-		String command = fetchCommand.Serialize();//"FETCH ID=3 X=25.46 Y=2.6 H=6.75 P=3\n";
 		
+		for(int i = 0; i<10;i++)
+		{
+			FetchCommand fetchCommand = new FetchCommand(3*i, (float)(25.46 * (float)i/10.0), (float)2.6, (float)6.75, i*2); 
+			String command = fetchCommand.Serialize();//"FETCH ID=3 X=25.46 Y=2.6 H=6.75 P=3\n";
+			
 			try {
-				LCD.drawString("Sending command", 0, 0);
-				LCD.refresh();
-				dos.writeChars(command);
-				dos.flush();			
+				Utils.writeUpperLineToLCD("Sending command");
+				Utils.send(dos, command);
+				logger.logSent(command);
 			} catch (IOException ioe) {
-				LCD.drawString("Write Exception", 0, 0);
-				LCD.refresh();
+				Utils.writeUpperLineToLCD("Write Exception");
+				
 			}
 			
 			try {
-				String response = "";
-				char c = dis.readChar();
-				while(c!='\n'){
-					response += c;
-					c = dis.readChar();
-				}
-				LCD.drawString(response, 0, 0);
-				LCD.refresh();
+				String response = Utils.receive(dis);
+				logger.logReceived(response);
+				Utils.writeUpperLineToLCD(response);
 			} catch (IOException ioe) {
-				LCD.drawString("Read Exception ", 0, 0);
-				LCD.refresh();
+				Utils.writeUpperLineToLCD("Read Exception");
 			}
-		
+			
+
+		}
+				
 		
 		try {
-			LCD.drawString("Closing...    ", 0, 0);
-			LCD.refresh();
+			Utils.writeUpperLineToLCD("Closing...");
 			dis.close();
 			dos.close();
 			btc.close();
 		} catch (IOException ioe) {
-			LCD.drawString("Close Exception", 0, 0);
-			LCD.refresh();
+			Utils.writeUpperLineToLCD("Close Exception");
 		}
+		
+		logger.close();
 		
 		LCD.clear();
 		LCD.drawString("Finished",3, 4);
 		LCD.refresh();
+		
 		Thread.sleep(2000);
+	}
+
+	
+
+	private static BTConnection connectBluetooth(DataLogger logger) throws InterruptedException {
+		
+		String[] names = new String[4];
+		names[0] = "Robot1";
+		names[1] = "Robot2";
+		names[2] = "NXT";
+		names[3] = "maria";
+		String name = "";
+		
+        Utils.writeUpperLineToLCD("Connecting...");
+		
+		RemoteDevice btrd = null;
+		
+		int i = 0;
+		while(i < names.length && btrd == null)
+		{
+			btrd = Bluetooth.getKnownDevice(names[i]);
+			i++;
+		}
+		
+		if (btrd == null) {
+			Utils.writeUpperLineToLCD("No such device");
+			
+			Thread.sleep(2000);
+			System.exit(1);
+		}
+		else
+		{
+			name = names[i-1];
+			
+			BTConnection btc = Bluetooth.connect(btrd);
+			
+			if (btc == null) {
+				Utils.writeUpperLineToLCD("Connect failed");
+				Thread.sleep(2000);
+				System.exit(1);
+			}
+			
+			String line = "Connected to " + name;
+			Utils.writeUpperLineToLCD(line);
+			
+			if(logger != null)
+				logger.writeLine(line);
+			
+			return btc;
+		}
+		
+		//that will never happen, as it will have either returned the connection, or exit the system (but the compiler does not see that!
+		return null; 
 	}
 }

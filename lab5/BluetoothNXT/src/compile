@@ -1,2 +1,9 @@
 nxjc BTReceive.java
 nxjlink -v BTReceive -o BTReceive.nxj
+
+
+D:\Dropbox\TekniskIT\LEGO\svn\FP_bluetoothComunicationNXT\src>nxjc BTConnectTest.java -sourcepath ..\..\FP_Communication\src
+
+D:\Dropbox\TekniskIT\LEGO\svn\FP_bluetoothComunicationNXT\src>nxjlink BTConnectTest -cp ..\..\FP_Communication\src;. -o BTConnectTest.nxj
+
+D:\Dropbox\TekniskIT\LEGO\svn\FP_bluetoothComunicationNXT\src>nxjupload BTConnectTest.nxj

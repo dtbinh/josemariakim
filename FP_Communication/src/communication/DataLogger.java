@@ -1,3 +1,4 @@
+package communication;
 import lejos.nxt.*;
 import java.io.*;
 /**
@@ -41,7 +42,16 @@ public class DataLogger
             System.exit(0);
         }
     }
+	public void logReceived(String line)
+	{
+		writeLine("<< " + line);
+	}
 	
+	public void logSent(String line)
+	{
+		writeLine(">> " + line);
+	}
+    
     public void writeLine (String line)
     {
     	
@@ -49,10 +59,6 @@ public class DataLogger
         {
         	byte[] bytes = line.getBytes(line);
         	fos.write(bytes);
-//        	for(int i=0; i<line.length(); i++)
-//            {
-//        		fos.write((byte) line.charAt(i));
-//            }
         	// New line
             fos.write((byte)('\r'));
             fos.write((byte)('\n'));

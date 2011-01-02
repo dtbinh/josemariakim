@@ -3,6 +3,7 @@
 	<name>bluetoothComunicationNXT</name>
 	<comment></comment>
 	<projects>
+		<project>FP_Communication</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
