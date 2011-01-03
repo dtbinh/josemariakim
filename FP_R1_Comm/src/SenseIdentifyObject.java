@@ -14,6 +14,7 @@ public class SenseIdentifyObject extends Behavior
 {	    
 	private int color_val = 9; // Red
     private final int maxMarks = 10;
+    private final float dist_to_obj = 210; // Distance to object (radius)
     private int idx = 0;
     private Pose[] landmarks;
 	private SyncUltrasonicSensor us;
@@ -75,7 +76,7 @@ public class SenseIdentifyObject extends Behavior
 			// Save location 
 			addPose(Car.getPose());
 			//send command to Robot2 to come and get the object
-			boolean success = BTSend.sendPose(Car.getPose(), color_val, foundThreshold, logger);
+			boolean success = BTSend.sendPose(Car.getPose(), color_val, dist_to_obj, logger); // 
 			
 			if(success)
 				Sound.playTone(800, 2000, 50);
