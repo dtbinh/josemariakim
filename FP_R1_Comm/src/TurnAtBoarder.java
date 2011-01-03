@@ -11,7 +11,8 @@ import lejos.nxt.*;
 public class TurnAtBoarder extends Behavior {
 
 	private final int lightThreshold = 40; // Black ~34
-	private final int angleDefault = 170; // Turn angle in search for object
+	//private final int angleDefault = 170; // Turn angle in search for object
+	private final int angleDefault = 150; // Turn angle in search for object
 	private boolean rotateLeft = false;
 	private int rotateAngle = angleDefault;
 	private LightSensor ls;

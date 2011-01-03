@@ -83,6 +83,12 @@ public class SenseIdentifyObject extends Behavior
 			else 
 				Sound.playTone(100, 2000, 50);
 			
+			// Backup giving space for robot #2 to pick up object
+			backward();
+			delay(100);
+			
+			// Stop and await for object to be removed
+			stop();
 			delay(30000);
         } 
     }
