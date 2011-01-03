@@ -1,3 +1,5 @@
+import communication.DataLogger;
+
 import lejos.nxt.*;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.Pose;
@@ -17,9 +19,9 @@ public class SenseIdentifyObject extends Behavior
 	private SyncUltrasonicSensor us;
 	private ColorSensor cs;
   
-    public SenseIdentifyObject( String name, int LCDrow, Behavior b, ColorSensor sColor, SyncUltrasonicSensor sSonic)
+    public SenseIdentifyObject( String name, int LCDrow, Behavior b, ColorSensor sColor, SyncUltrasonicSensor sSonic, DataLogger logger)
     {
-    	super(name, LCDrow, b);
+    	super(name, LCDrow, b, logger);
     	this.cs = sColor;
     	this.us = sSonic;
     	this.landmarks = new Pose[maxMarks];
@@ -41,8 +43,18 @@ public class SenseIdentifyObject extends Behavior
 		y = (int)p.getY();
 		head = (int)p.getHeading();
     	msg = x + "," + y + "," + head;
-        LCD.drawString(msg, 0, 7);	    	    	
+        LCD.drawString(msg, 0, 7);	
+        
+        String line = "Object found: x = ";
+        line += p.getX();
+        line += ", y = ";
+        line += p.getY();
+        line += ", heading = ";
+        line += p.getHeading();
+        
+        logLine(line);
     }
+    
     
     public void addPose(Pose p)
     {
@@ -62,7 +74,14 @@ public class SenseIdentifyObject extends Behavior
 			stop();
 			// Save location 
 			addPose(Car.getPose());
-			Sound.playTone(800, 2000, 50);
+			//send command to Robot2 to come and get the object
+			boolean success = BTSend.sendPose(Car.getPose(), color_val, foundThreshold, logger);
+			
+			if(success)
+				Sound.playTone(800, 2000, 50);
+			else 
+				Sound.playTone(100, 2000, 50);
+			
 			delay(30000);
         } 
     }

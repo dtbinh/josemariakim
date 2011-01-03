@@ -1,3 +1,5 @@
+import communication.DataLogger;
+
 /**
  * A behavior that make a car drive around randomly.
  *  
@@ -6,9 +8,9 @@
  */
 public class MoveForward extends Behavior 
 {
-    public MoveForward( String name, int LCDrow, Behavior b)
+    public MoveForward( String name, int LCDrow, Behavior b, DataLogger logger)
     {
-    	super(name, LCDrow, b);
+    	super(name, LCDrow, b, logger);
     }
     	
     public void run()

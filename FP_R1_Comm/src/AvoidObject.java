@@ -1,3 +1,5 @@
+import communication.DataLogger;
+
 /**
  * Behavior: Avoid object
  *  
@@ -8,9 +10,9 @@ public class AvoidObject extends Behavior
 {    
     private SyncUltrasonicSensor us ;
            
-    public AvoidObject( String name, int LCDrow, Behavior b, SyncUltrasonicSensor uSensor)
+    public AvoidObject( String name, int LCDrow, Behavior b, SyncUltrasonicSensor uSensor, DataLogger logger)
     {
-    	super(name, LCDrow, b);
+    	super(name, LCDrow, b, logger);
         this.us = uSensor;
     }
     

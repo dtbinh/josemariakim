@@ -1,3 +1,5 @@
+import communication.DataLogger;
+
 import lejos.nxt.*;
 /**
  * A behavior that uses an ultrasonic sensor on port S1
@@ -12,9 +14,9 @@ public class GripObject extends Behavior
     private final int tooCloseThreshold = 10; // cm
     Motor gripper;
            
-    public GripObject( String name, int LCDrow, Behavior b, UltrasonicSensor sensor, Motor grip)
+    public GripObject( String name, int LCDrow, Behavior b, UltrasonicSensor sensor, Motor grip, DataLogger logger)
     {
-    	super(name, LCDrow, b);
+    	super(name, LCDrow, b, logger);
         us = sensor; 
         gripper = grip;
     }

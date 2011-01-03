@@ -33,29 +33,33 @@ public class Command
 		if(frame.indexOf("FETCH")> -1)
 		{
 			this.commandID = "FETCH";
-			if(logging) this.dataLogger.writeLine(commandID);
-			LCD.drawString(commandID, 0, 0);
-			int index = frame.indexOf(' ');
-			int start = index +1;
-			index = frame.indexOf(' ', start);
-			while(index > -1)
-			{
-				String parameter = frame.substring(start, index);
-				parseParameter(parameter);
-				
-				start = index + 1;
-				index = frame.indexOf(' ', start);
-			}
-			//add the last parameter, if any
-			if(frame.indexOf('=', start) > -1)
-			{
-				String parameter = frame.substring(start);
-				parseParameter(parameter);
-				
-			}
-			
-			if(logging) this.dataLogger.writeLine("Command parsed");
 		}
+		else if(frame.indexOf("ACK")> -1)
+		{
+			this.commandID = "ACK";
+		}
+		if(logging) this.dataLogger.writeLine(commandID);
+		int index = frame.indexOf(' ');
+		int start = index +1;
+		index = frame.indexOf(' ', start);
+		while(index > -1)
+		{
+			String parameter = frame.substring(start, index);
+			parseParameter(parameter);
+			
+			start = index + 1;
+			index = frame.indexOf(' ', start);
+		}
+		//add the last parameter, if any
+		if(frame.indexOf('=', start) > -1)
+		{
+			String parameter = frame.substring(start);
+			parseParameter(parameter);
+			
+		}
+		
+		if(logging) this.dataLogger.writeLine("Command parsed");
+		
  	}
 	
  	public String Serialize()

@@ -1,3 +1,5 @@
+import communication.DataLogger;
+
 import lejos.nxt.*;
 import lejos.nxt.addon.RCXLightSensor;
 /**
@@ -13,9 +15,9 @@ public class FindObject extends Behavior {
 	private RCXLightSensor rightLight;
 	private PIDControl pidControl;
 	
-	public FindObject(String name, int LCDrow, Behavior subsumedBehavior) 
+	public FindObject(String name, int LCDrow, Behavior subsumedBehavior, DataLogger logger) 
 	{
-		super(name, LCDrow, subsumedBehavior);
+		super(name, LCDrow, subsumedBehavior, logger);
 		leftLight = new RCXLightSensor(SensorPort.S2);
 		leftLight.setFloodlight(true);
 		rightLight = new RCXLightSensor(SensorPort.S3);

@@ -1,5 +1,4 @@
 
-import lejos.nxt.*;
 import lejos.robotics.Pose;
 
 /**

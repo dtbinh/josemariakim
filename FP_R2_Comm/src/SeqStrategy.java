@@ -1,3 +1,5 @@
+import communication.DataLogger;
+
 import lejos.nxt.*;
 import lejos.robotics.Pose;
 /**
@@ -14,9 +16,9 @@ public class SeqStrategy extends Behavior
     private int x_loc, y_loc, head;
     Motor gripper;
            
-    public SeqStrategy( String name, int LCDrow, Behavior b, UltrasonicSensor sensor, Motor grip)
+    public SeqStrategy( String name, int LCDrow, Behavior b, UltrasonicSensor sensor, Motor grip, DataLogger logger)
     {
-    	super(name, LCDrow, b);
+    	super(name, LCDrow, b, logger);
         us = sensor; 
         gripper = grip;
     }
@@ -47,10 +49,14 @@ public class SeqStrategy extends Behavior
    
     public void WaitForObjLocation()
     {
-    	// Simulate pose received from robot #1
-    	//ObjectLocation objLoc = new ObjectLocation(702, -156, -171, 20);
-    	// T1 ObjectLocation objLoc = new ObjectLocation(666, -153, -166, 200);
-       	ObjectLocation objLoc = new ObjectLocation(738, -427, -170, 210);
+    	ObjectLocation objLoc = null;
+    	
+    	while(objLoc == null)
+    	{
+    		objLoc = BTReceive.WaitAndReceiveLocation(logger);
+    		if(objLoc == null)
+    			logLine("There were errors receiving the object location");
+    	}
            	
     	// Test of object location class
     	//ObjectLocation objLoc = new ObjectLocation(702, -156, 45, 20);

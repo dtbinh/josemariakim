@@ -1,7 +1,12 @@
+import communication.DataLogger;
+import communication.Utils;
+
 import lejos.nxt.*;
 
-public class Robot2NavGrip 
+public class Robot2Comm 
 {
+	private static String filePrefix = "robot1Log";
+
     public static void main(String [] args)
     {    	
     	//GripObject go;
@@ -10,14 +15,23 @@ public class Robot2NavGrip
 		Motor gripper = Motor.A;
 		UltrasonicSensor us = new UltrasonicSensor(SensorPort.S1);
 		
+		//Create logger
+ 	    String fileName;
+		try {
+			fileName = Utils.getFileName(filePrefix );
+		} catch (InterruptedException e) {
+			fileName = filePrefix + "99"; //in case of an error
+		}
+ 	    DataLogger logger = new DataLogger(fileName);
+ 	    
 		Car.InitCar();
     	
         LCD.drawString("Robot 2 NavGrip",0,0);
         LCD.refresh();
     	
-        fo = new FindObject("Find", 3, null);
+        fo = new FindObject("Find", 3, null, logger);
     	//go = new GripObject ("Avoid", 4, fo, us, gripper);
-    	ss = new SeqStrategy ("Sequence", 4, fo, us, gripper);
+    	ss = new SeqStrategy ("Sequence", 4, fo, us, gripper, logger);
     	//ss.WaitForObjLocation(); // Testing ObjectLocation class
 
 		while (Button.ENTER.isPressed());	
@@ -45,6 +59,8 @@ public class Robot2NavGrip
     		fo.reportState();
     	}
 
+    	logger.close();
+    	
     	LCD.clear();
         LCD.drawString("Program stopped",0,0);
         LCD.refresh();

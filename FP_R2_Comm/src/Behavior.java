@@ -1,3 +1,5 @@
+import communication.DataLogger;
+
 import lejos.nxt.LCD;
 /**
  * A platform for a behavior based system with a simple
@@ -22,14 +24,20 @@ public class Behavior extends Thread
     
     private int suppressCount;
     private Behavior subsumedBehavior;
+    
+    protected DataLogger logger; //accessible to children
+	private String loggingPrefix;
 	
-    public Behavior(String name, int LCDrow, Behavior subsumedBehavior)
+    public Behavior(String name, int LCDrow, Behavior subsumedBehavior, DataLogger logger)
     {
         suppressCount = 0;
         this.setDaemon(true);
     	this.name = name;
     	this.LCDrow = LCDrow;
     	this.subsumedBehavior = subsumedBehavior;
+    	
+    	this.logger = logger;
+    	this.loggingPrefix = "[" + name + "]";
     }
 	
     // Suppress mechanism
@@ -130,6 +138,13 @@ public class Behavior extends Thread
     {
         LCD.drawString(s,name.length()+7, LCDrow);
         LCD.refresh();
+    }
+    
+  //Access to logger
+    public void logLine(String line)
+    {
+    	String log = loggingPrefix + " " + line;
+    	logger.writeLine(log);
     }
     
     public void delay(int time)

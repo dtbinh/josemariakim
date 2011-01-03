@@ -1,9 +1,9 @@
-import lejos.nxt.*;
 import lejos.nxt.comm.*;
 import java.io.*;
 
 import communication.Command;
 import communication.DataLogger;
+import communication.FetchCommand;
 import communication.Utils;
 
 
@@ -17,66 +17,84 @@ import communication.Utils;
  */
 public class BTReceive {
 
-	private static String filePrefix = "receiverLog";
-	public static void main(String [] args)  throws Exception 
+	public static ObjectLocation WaitAndReceiveLocation(DataLogger logger) 
 	{
 		String connected = "Connected";
         String waiting = "Waiting...";
-        String closing = "Closing...";
         
-        String fileName = Utils.getFileName(filePrefix);
-        DataLogger logger = new DataLogger(fileName);
-		
+        ObjectLocation location = null;
+        
         Utils.writeUpperLineToLCD(waiting);
-		logger.writeLine(waiting);
+		logBluetooth(waiting, logger);
 
         BTConnection btc = Bluetooth.waitForConnection();
         
         Utils.writeUpperLineToLCD(connected);
         
-		logger.writeLine(connected);
+        logBluetooth(connected, logger);
 		
 		DataInputStream dis = btc.openDataInputStream();
 		DataOutputStream dos = btc.openDataOutputStream();
 		
-		for(int i = 0; i<10; i++)
+		String commandString;
+		try {
+			commandString = Utils.receive(dis);
+			
+		} catch (IOException e) {
+			logBluetooth("Error receiving command", logger);
+			return null;
+		}
+				
+		if(commandString.length() > 0)
 		{
-			String commandString = Utils.receive(dis);
-					
-			if(commandString.length() > 0)
-			{
-				logger.logReceived(commandString);
+			logger.logReceived(commandString);
+			
+			Utils.writeUpperLineToLCD("Parsing the command");
+			
+			Command command = new Command();
+			command.Deserialize(commandString);
 				
-				Utils.writeUpperLineToLCD("Parsing the command");
-				
-				Command command = new Command();
-				command.Deserialize(commandString);
-					
-				Utils.writeUpperLineToLCD("Command parsed");
-				
-				String ack = "ACK\n";
+			Utils.writeUpperLineToLCD("Command parsed");
+			
+			String ack = "ACK\n";
+			try {
 				Utils.send(dos, ack);
-				logger.logSent(ack);
+			} catch (IOException e) {
+				logBluetooth("Error sending ACK", logger);
+				return null;
 			}
-			else
+			logger.logSent(ack);
+			
+			if(command.getCommandID() == "FETCH")
 			{
-				logger.logReceived("null");
+				FetchCommand fetch = new FetchCommand(command);
+				location = new ObjectLocation(fetch.getX(), fetch.getY(), fetch.getHeading(), fetch.getRadius());				
 			}
+			
+		}
+		else
+		{
+			logger.logReceived("null");
 		}
 		
-		dis.close();
-		dos.close();
-		Thread.sleep(100); // wait for data to drain
 		
-		logger.close();
-		while (! Button.ESCAPE.isPressed()){}
+		try {
+			dis.close();
+			dos.close();
+			Thread.sleep(100); // wait for data to drain
+			
+		} catch (Exception e) {
+			logBluetooth("Error closing", logger);
+			return null;
+		}
 		
-		Utils.writeUpperLineToLCD(closing);
-		
-		btc.close();
-		LCD.clear();
+		return location;
 		
 	}
-	
+	private static void logBluetooth(String line, DataLogger logger)
+	{
+		String log = "[Bluetooth] " + line;
+		logger.writeLine(log);
+	}
 }
 

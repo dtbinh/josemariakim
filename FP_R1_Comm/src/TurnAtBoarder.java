@@ -1,3 +1,5 @@
+import communication.DataLogger;
+
 import lejos.nxt.*;
 /**
  * Behavior: Turn at boarder
@@ -14,9 +16,9 @@ public class TurnAtBoarder extends Behavior {
 	private int rotateAngle = angleDefault;
 	private LightSensor ls;
 	
-	public TurnAtBoarder(String name, int LCDrow, Behavior subsumedBehavior, LightSensor lightSensor) 
+	public TurnAtBoarder(String name, int LCDrow, Behavior subsumedBehavior, LightSensor lightSensor, DataLogger logger) 
 	{
-		super(name, LCDrow, subsumedBehavior);
+		super(name, LCDrow, subsumedBehavior, logger);
 		this.ls = lightSensor;
 	}
 
@@ -43,6 +45,8 @@ public class TurnAtBoarder extends Behavior {
 			// it turns to search for object in a new direction. 
 			// Turn either +/- 160 degrees
 			suppress();
+			
+			logLine("Turning at border");
 			
 			if (++countBoarderSeen < 2)
 			{

@@ -1,3 +1,5 @@
+import communication.DataLogger;
+
 import lejos.nxt.*;
 /**
  * Behavior: Avoid object
@@ -14,9 +16,9 @@ public class PlaySound extends Behavior
 
     private SyncUltrasonicSensor us ;
            
-    public PlaySound( String name, int LCDrow, Behavior b, SyncUltrasonicSensor uSensor)
+    public PlaySound( String name, int LCDrow, Behavior b, SyncUltrasonicSensor uSensor, DataLogger logger)
     {
-    	super(name, LCDrow, b);
+    	super(name, LCDrow, b, logger);
         this.us = uSensor;
     }
    
