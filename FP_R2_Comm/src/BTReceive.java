@@ -1,6 +1,7 @@
 import lejos.nxt.comm.*;
 import java.io.*;
 
+import communication.ACKCommand;
 import communication.Command;
 import communication.DataLogger;
 import communication.FetchCommand;
@@ -56,14 +57,15 @@ public class BTReceive {
 				
 			Utils.writeUpperLineToLCD("Command parsed");
 			
-			String ack = "ACK\n";
+			ACKCommand ack = new ACKCommand();
+			
 			try {
-				Utils.send(dos, ack);
+				Utils.send(dos, ack.Serialize());
 			} catch (IOException e) {
 				logBluetooth("Error sending ACK", logger);
 				return null;
 			}
-			logger.logSent(ack);
+			logger.logSent(ack.Serialize());
 			
 			if(command.getCommandID() == "FETCH")
 			{
