@@ -57,13 +57,7 @@ public class SeqStrategy extends Behavior
     		if(objLoc == null)
     			logLine("There were errors receiving the object location");
     	}
-           	
-    	// Test of object location class
-    	//ObjectLocation objLoc = new ObjectLocation(702, -156, 45, 20);
-    	//ObjectLocation objLoc = new ObjectLocation(702, -156, 135, 20);
-    	//ObjectLocation objLoc = new ObjectLocation(702, -156, -45, 20);
-    	//ObjectLocation objLoc = new ObjectLocation(702, -156, -135, 20);
-    	
+           	    	
     	// Convert robot #1 position to location for robot #2
     	Pose robot2pose = objLoc.GetRobot2Pose();
     	x_loc = Math.round(robot2pose.getX());
@@ -73,11 +67,6 @@ public class SeqStrategy extends Behavior
     	// Display robot #2 pose
     	String msg = x_loc + "," + y_loc + "," + head;
         LCD.drawString(msg, 0, 7);	    	    	
-    	/*
-    	x_loc = 602;
-    	y_loc = -260;
-    	head = -15;
-    	*/
     }
 
     private void MoveToOjbLocation()
