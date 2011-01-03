@@ -83,6 +83,7 @@ public class BTReceive {
 		try {
 			dis.close();
 			dos.close();
+			btc.close();
 			Thread.sleep(100); // wait for data to drain
 			
 		} catch (Exception e) {
