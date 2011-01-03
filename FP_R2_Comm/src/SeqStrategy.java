@@ -25,7 +25,7 @@ public class SeqStrategy extends Behavior
    
     public void liftGripArm()
     {
-		gripper.rotateTo(30);
+		gripper.rotateTo(-50);
     }
 
     private void releaseGripArm()
@@ -35,7 +35,7 @@ public class SeqStrategy extends Behavior
 
     private void lowerGripArm()
     {
-		gripper.rotateTo(0);
+		gripper.rotateTo(-15);
     }
     
 	private boolean WaitMoving()
