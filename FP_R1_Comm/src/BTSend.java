@@ -16,7 +16,7 @@ public class BTSend {
 //		String fileName = Utils.getFileName(filePrefix);
 //        DataLogger logger = new DataLogger(fileName);       
         
-        logger.writeLine("Connecting...");
+		logBluetooth("Connecting...", logger);
         BTConnection btc;
 		try {
 			btc = connectBluetooth(logger);
