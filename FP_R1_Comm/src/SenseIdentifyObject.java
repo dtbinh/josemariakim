@@ -89,7 +89,7 @@ public class SenseIdentifyObject extends Behavior
 			
 			// Stop and await for object to be removed
 			stop();
-			delay(30000);
+			delay(20000);
         } 
     }
     

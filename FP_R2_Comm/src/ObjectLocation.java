@@ -14,6 +14,9 @@ public class ObjectLocation {
 
 	Pose robot1Pose;
 	Pose robot2Pose;
+	// X direction offset to let the PID control 
+	// handle getting close to the object
+    private final float x_offset = 100; // Offset to object [mm]
 	float radius;
 	
 	ObjectLocation(float x, float y, float heading, float r)
@@ -73,6 +76,10 @@ public class ObjectLocation {
 			   yr = y - r*Math.sin(ar); 
 			   xr = x - r*(1 - Math.cos(ar));
 			}
+			
+			// Subtract offset from x coordinate  
+			if (xr >= x_offset) xr -= x_offset;
+			else xr = 0;
 			
 			// Robot #2 default heading 0 degrees
 			robot2Pose = new Pose((float)xr, (float)-yr, (float)0.0);
