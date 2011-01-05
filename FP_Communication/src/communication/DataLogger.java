@@ -57,11 +57,14 @@ public class DataLogger
     	
         try 
         {
-        	byte[] bytes = line.getBytes(line);
-        	fos.write(bytes);
-        	// New line
-            fos.write((byte)('\r'));
-            fos.write((byte)('\n'));
+        	if (line.length() > 0)
+        	{
+	        	byte[] bytes = line.getBytes(line);
+	        	fos.write(bytes);
+	        	// New line
+	            fos.write((byte)('\r'));
+	            fos.write((byte)('\n'));
+        	}
 		} 
         catch (IOException e) 
         {

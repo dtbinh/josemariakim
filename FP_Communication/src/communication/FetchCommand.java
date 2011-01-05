@@ -33,7 +33,7 @@ public class FetchCommand extends Command {
 	
 	public FetchCommand(Command command)
 	{
-		if(command.getCommandID() == ID )
+		//if(command.getCommandID() == ID )
 		{
 			this.commandID = ID;
 			this.dataLogger = command.dataLogger;
