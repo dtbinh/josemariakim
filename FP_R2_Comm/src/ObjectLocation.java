@@ -16,7 +16,7 @@ public class ObjectLocation {
 	Pose robot2Pose;
 	// X direction offset to let the PID control 
 	// handle getting close to the object
-    private final float x_offset = 100; // Offset to object [mm]
+    private final float x_offset = 200; // Offset to object [mm]
 	float radius;
 	
 	ObjectLocation(float x, float y, float heading, float r)

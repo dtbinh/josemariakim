@@ -12,7 +12,7 @@ import lejos.robotics.Pose;
 public class SeqStrategy extends Behavior 
 {    
     private UltrasonicSensor us ;
-    private final int tooCloseThreshold = 10; // cm
+    private final int tooCloseThreshold = 8; // cm
     private int x_loc, y_loc, head;
     Motor gripper;
            
@@ -137,7 +137,9 @@ public class SeqStrategy extends Behavior
     
     public void run() 
     {
-  	
+    	int distance;
+    	int tooCloseCount;
+    	
         while (true)
         {
 
@@ -148,11 +150,12 @@ public class SeqStrategy extends Behavior
             release();		   
 
             // Let find object behavior get close to object
-        	int distance = us.getDistance();
-            while ( distance > tooCloseThreshold )
+        	tooCloseCount = 15;
+            while ( tooCloseCount > 0 )
             {
                 distance = us.getDistance();
                 drawInt(distance);
+                if (distance < tooCloseThreshold) tooCloseCount--;
             }
             
             suppress();	

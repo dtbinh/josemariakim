@@ -67,7 +67,7 @@ public class BTReceive {
 			}
 			logger.logSent(ack.Serialize());
 			
-			if(command.getCommandID() == "FETCH")
+			//if(command.getCommandID()ack == "FETCH")
 			{
 				FetchCommand fetch = new FetchCommand(command);
 				location = new ObjectLocation(fetch.getX(), fetch.getY(), fetch.getHeading(), fetch.getRadius());				
