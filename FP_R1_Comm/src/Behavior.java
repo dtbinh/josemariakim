@@ -21,7 +21,7 @@ public class Behavior extends Thread
 {
     protected final int closeThreshold = 25; // cm
     protected final int foundThreshold = 20; // cm
-    protected final int tooCloseThreshold = 15; // cm
+    protected final int tooCloseThreshold = 10; // cm
 
     private String name;
     private int LCDrow;

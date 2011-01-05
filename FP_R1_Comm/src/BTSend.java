@@ -50,6 +50,8 @@ public class BTSend {
 			Utils.writeUpperLineToLCD("Read Exception");
 			logBluetooth("Read Exception", logger);
 		}
+
+		Utils.writeUpperLineToLCD("Step 1");
 		
 		try {
 			dis.close();
@@ -59,10 +61,11 @@ public class BTSend {
 			Utils.writeUpperLineToLCD("Close Exception");
 			logBluetooth("Close Exception", logger);
 		}
+
+		Utils.writeUpperLineToLCD("Step 2");
 		
 		//return true if the response received is an ACK
-		return response.indexOf("ACK") > -1;
-			
+		return response.indexOf("ACK") > -1;			
 	}
 
 	

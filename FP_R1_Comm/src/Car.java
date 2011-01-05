@@ -42,6 +42,11 @@ public class Car
     	return robot.getPose();
     }
     
+    public static synchronized void setPose(int x, int y, int heading)
+    {
+    	robot.setPose(0, 0, 0);
+    }
+    
     public static synchronized void stop() 
     {
     	robot.stop();

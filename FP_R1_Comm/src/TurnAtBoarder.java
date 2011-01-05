@@ -12,10 +12,23 @@ public class TurnAtBoarder extends Behavior {
 
 	private final int lightThreshold = 40; // Black ~34
 	//private final int angleDefault = 170; // Turn angle in search for object
-	private final int angleDefault = 150; // Turn angle in search for object
+	private final int angleDefault = 140; // Turn angle in search for object
 	private boolean rotateLeft = false;
 	private int rotateAngle = angleDefault;
 	private LightSensor ls;
+	private int numberOfTurns;
+	
+	// Return number of turn at boarder since started 
+	public int GetNumberOfTurns()
+	{
+		return numberOfTurns;
+	}
+	
+	public void ResetTurns()
+	{
+		rotateLeft = false;
+		numberOfTurns = 0;
+	}
 	
 	public TurnAtBoarder(String name, int LCDrow, Behavior subsumedBehavior, LightSensor lightSensor, DataLogger logger) 
 	{
@@ -27,6 +40,7 @@ public class TurnAtBoarder extends Behavior {
 		String message;
 		int countBoarderSeen = 0;  // Counts how many times the boarder seen in a row
 		int timeSinceLastTurn = 0; // Counts the time between turns
+		numberOfTurns = 0;
 		
 		while(true){
 			
@@ -66,7 +80,7 @@ public class TurnAtBoarder extends Behavior {
 			else
 				rotate(rotateAngle);
 
-			
+			numberOfTurns++;
 			message = getStatusMessage();			
 			drawString(message);
 			delay(100);

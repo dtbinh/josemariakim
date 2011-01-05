@@ -19,13 +19,16 @@ public class SenseIdentifyObject extends Behavior
     private Pose[] landmarks;
 	private SyncUltrasonicSensor us;
 	private ColorSensor cs;
+	private TurnAtBoarder turnAtBoarder;
+	private boolean stopped = false;
   
-    public SenseIdentifyObject( String name, int LCDrow, Behavior b, ColorSensor sColor, SyncUltrasonicSensor sSonic, DataLogger logger)
+    public SenseIdentifyObject( String name, int LCDrow, Behavior b, ColorSensor sColor, SyncUltrasonicSensor sSonic, TurnAtBoarder tab, DataLogger logger)
     {
     	super(name, LCDrow, b, logger);
     	this.cs = sColor;
     	this.us = sSonic;
     	this.landmarks = new Pose[maxMarks];
+    	this.turnAtBoarder = tab;
     }
     
     public void setColor()
@@ -36,7 +39,17 @@ public class SenseIdentifyObject extends Behavior
         LCD.drawString(msg, 0, 7);
     }
     
-    public void dispPose(Pose p)
+    public void Pause(boolean stop)
+    {
+    	stopped = stop;
+    }
+    
+    public void ResetPose()
+    {
+    	Car.setPose(0,0,0);
+    }
+    
+    private void dispPose(Pose p)
     {
     	String msg;
     	int x, y, head;
@@ -57,7 +70,7 @@ public class SenseIdentifyObject extends Behavior
     }
     
     
-    public void addPose(Pose p)
+    private void addPose(Pose p)
     {
     	// Add new landmark found
     	if (idx < maxMarks)
@@ -72,24 +85,32 @@ public class SenseIdentifyObject extends Behavior
         int distance = us.getDistance();
         if (distance < foundThreshold)
         {
-			stop();
+        	// Stop robot until released
+  			stop();
+        	stopped = true;
+        	
 			// Save location 
 			addPose(Car.getPose());
 			//send command to Robot2 to come and get the object
 			boolean success = BTSend.sendPose(Car.getPose(), color_val, dist_to_obj, logger); // 
 			
 			if(success)
-				Sound.playTone(800, 2000, 50);
+			{
+				Sound.playTone(800, 2000, 50); // High tone
+
+				// Backup giving space for robot #2 to pick up object
+				backward();
+				delay(500);
+			}
 			else 
-				Sound.playTone(100, 2000, 50);
-			
-			// Backup giving space for robot #2 to pick up object
-			backward();
-			delay(100);
-			
+				Sound.playTone(100, 2000, 50); // Low tone
+					
 			// Stop and await for object to be removed
-			stop();
-			delay(20000);
+			while (stopped)
+			{
+				stop();
+				delay(1000);
+			}
         } 
     }
     
