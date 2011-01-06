@@ -2,7 +2,6 @@ package communication;
 
 
 import java.util.*;
-import lejos.nxt.*;
 
 public class Command 
 {
@@ -26,19 +25,30 @@ public class Command
 	
  	public void Deserialize(String frame)
  	{
+ 		//log if we are debugging
  		if(logging) this.dataLogger.writeLine("Parsing the command");
-		this.commandID = "";
-		LCD.drawString("creating command", 0, 0);
-		this.parameters = new Hashtable();
+ 		
+ 		//parse the command ID
 		if(frame.indexOf("FETCH")> -1)
 		{
-			this.commandID = "FETCH";
+			this.commandID = FetchCommand.ID;
 		}
 		else if(frame.indexOf("ACK")> -1)
 		{
-			this.commandID = "ACK";
+			this.commandID = ACKCommand.ID;
+		}
+		else if(frame.indexOf("DELIVER")> -1)
+		{
+			this.commandID = DeliverCommand.ID;
+		}
+		else
+		{
+			this.commandID = "";
 		}
 		if(logging) this.dataLogger.writeLine(commandID);
+		
+		//Parse the parameters
+		this.parameters = new Hashtable();
 		int index = frame.indexOf(' ');
 		int start = index +1;
 		index = frame.indexOf(' ', start);

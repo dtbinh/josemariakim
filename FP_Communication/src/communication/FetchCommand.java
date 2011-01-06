@@ -3,7 +3,7 @@ package communication;
 
 public class FetchCommand extends Command {
 
-	private String ID = "FETCH";
+	public static String ID = "FETCH";
 	public FetchCommand(DataLogger logger)
 	{
 		super(logger);
@@ -33,7 +33,7 @@ public class FetchCommand extends Command {
 	
 	public FetchCommand(Command command)
 	{
-		//if(command.getCommandID() == ID )
+		if(command.getCommandID().equals(ID) )
 		{
 			this.commandID = ID;
 			this.dataLogger = command.dataLogger;

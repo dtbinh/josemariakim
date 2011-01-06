@@ -28,7 +28,6 @@ public class BTConnectTest {
 		DataInputStream dis = btc.openDataInputStream();
 		DataOutputStream dos = btc.openDataOutputStream();
 		
-		
 		for(int i = 0; i<10;i++)
 		{
 			FetchCommand fetchCommand = new FetchCommand(3*i, (float)(25.46 * (float)i/10.0), (float)2.6, (float)6.75, i*2); 

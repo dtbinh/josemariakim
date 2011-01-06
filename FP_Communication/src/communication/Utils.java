@@ -19,7 +19,6 @@ public class Utils
 	public static String receive(DataInputStream dis)
 	throws IOException 
 	{
-		
 		char c = dis.readChar();
 		String response = "";
 		while(c!='\n'){
@@ -53,5 +52,11 @@ public class Utils
 		LCD.clear();
 		LCD.drawString(line, 0, 0);
 		LCD.refresh();
+	}
+	
+	public static void logBluetooth(String line, DataLogger logger)
+	{
+		String log = "[Bluetooth] " + line;
+		logger.writeLine(log);
 	}
 }

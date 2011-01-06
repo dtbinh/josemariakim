@@ -19,6 +19,7 @@ public class DataLogger
 {
     private File f;
     private FileOutputStream fos;
+    
     public DataLogger (String fileName)
     {
         try
@@ -42,11 +43,11 @@ public class DataLogger
             System.exit(0);
         }
     }
-	public void logReceived(String line)
+	
+    public void logReceived(String line)
 	{
 		writeLine("<< " + line);
 	}
-	
 	public void logSent(String line)
 	{
 		writeLine(">> " + line);

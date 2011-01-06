@@ -5,7 +5,7 @@ import lejos.nxt.*;
 
 public class Robot2Comm 
 {
-	private static String filePrefix = "robot1Log";
+	private static String filePrefix = "robot2Log";
 
     public static void main(String [] args)
     {    	
