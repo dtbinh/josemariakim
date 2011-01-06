@@ -1,12 +1,12 @@
-
+package r2_pc;
 import communication.DataLogger;
 import communication.Utils;
 
 import lejos.nxt.*;
 
-public class Robot2Comm 
+public class Robot2PC 
 {
-	private static String filePrefix = "robot2Log";
+	private static String filePrefix = "robot2PCLog";
 
     public static void main(String [] args)
     {    	

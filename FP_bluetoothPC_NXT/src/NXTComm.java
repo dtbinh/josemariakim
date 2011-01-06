@@ -28,19 +28,14 @@ public class NXTComm {
 			fileName = filePrefix + "99"; //in case of an error
 		}
 		
+		
         DataLogger logger = new DataLogger(fileName);
 		
-        BTConnection btc = BTReceive.waitForConnection(logger);
-        DataInputStream dis = btc.openDataInputStream();
-		DataOutputStream dos = btc.openDataOutputStream();
-		
-		  		
-		for(int i = 0; i<10 ; i++)
-    	{
-			
-    		ObjectLocation location = BTReceive.receiveLocation(logger, BTReceive.Location.HOME , dis, dos);
-    		
-    		String msg;
+        while(! Button.ESCAPE.isPressed())
+        {
+        	ObjectLocation location = BTReceive.WaitAndReceiveHomeLocation(logger);
+        	
+        	String msg;
         	int x, y;
         	Pose pose = location.GetRobot1Pose();
         	
@@ -55,13 +50,40 @@ public class NXTComm {
             line += y;
             
             logger.writeLine(line);
-    		
-    	}
-
-		
-		BTReceive.closeAllChannels(logger, btc, dis, dos);
-		
-		while (! Button.ESCAPE.isPressed()) {}
+        }
+        
+//        BTConnection btc = BTReceive.waitForConnection(logger);
+//        DataInputStream dis = btc.openDataInputStream();
+//		DataOutputStream dos = btc.openDataOutputStream();
+//		
+//		  		
+//		for(int i = 0; i<10 ; i++)
+//    	{
+//			
+//    		ObjectLocation location = BTReceive.receiveLocation(logger, BTReceive.Location.HOME , dis, dos);
+//    		
+//    		String msg;
+//        	int x, y;
+//        	Pose pose = location.GetRobot1Pose();
+//        	
+//    		x = (int) pose.getX();
+//    		y = (int) pose.getY();
+//    		msg = x + "," + y ;
+//            LCD.drawString(msg, 0, 7);	
+//            
+//            String line = "Location received: x = ";
+//            line += x;
+//            line += ", y = ";
+//            line += y;
+//            
+//            logger.writeLine(line);
+//    		
+//    	}
+//
+//		
+//		BTReceive.closeAllChannels(logger, btc, dis, dos);
+//		
+//		while (! Button.ESCAPE.isPressed()) {}
 		
     	logger.close();
     	

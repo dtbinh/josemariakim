@@ -1,4 +1,4 @@
-
+package r2_pc;
 import communication.DataLogger;
 
 import lejos.nxt.*;
@@ -54,7 +54,7 @@ public class SeqStrategy extends Behavior
     	
     	while(objLoc == null)
     	{
-    		objLoc = BTReceive.WaitAndReceiveLocation(logger);
+    		objLoc = BTReceive.WaitAndReceiveObjectLocation(logger);
     		if(objLoc == null)
     			logLine("There were errors receiving the object location");
     	}
@@ -67,7 +67,15 @@ public class SeqStrategy extends Behavior
     	
     	// Display robot #2 pose
     	String msg = x_loc + "," + y_loc + "," + head;
-        LCD.drawString(msg, 0, 7);	    	    	
+        LCD.drawString(msg, 0, 7);	    
+        
+        String line = "Get object at: x = ";
+        line += x_loc;
+        line += " , y = ";
+        line += " , heading = ";
+        line += head;
+        
+        logLine(line);
     }
 
     private void MoveToOjbLocation()
@@ -102,7 +110,25 @@ public class SeqStrategy extends Behavior
     private void BringObjectHome()
     {
 		// Return to home position
-		goTo(0, 0, true);
+    	ObjectLocation homeLoc = null;
+    	
+    	while(homeLoc == null)
+    	{
+    		homeLoc = BTReceive.WaitAndReceiveHomeLocation(logger);
+    		if(homeLoc == null)
+    			logLine("There were errors receiving the home location");
+    	}
+           	    	
+    	// Convert robot #1 position to location for robot #2
+    	Pose pose = homeLoc.GetRobot1Pose();
+    	x_loc = Math.round(pose.getX());
+    	y_loc = Math.round(pose.getY());
+    	
+    	// Display robot #2 pose
+    	String msg = x_loc + "," + y_loc;
+        LCD.drawString(msg, 0, 7);
+        
+		goTo(x_loc, y_loc, true);
 		WaitMoving();
         liftGripArm();
         delay(2500); // Object must be manual removed 

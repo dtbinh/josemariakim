@@ -1,4 +1,4 @@
-
+package r2_pc;
 import lejos.nxt.*;
 import lejos.robotics.Pose;
 import lejos.robotics.navigation.SimpleNavigator;

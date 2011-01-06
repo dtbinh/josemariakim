@@ -1,19 +1,37 @@
+package pcProgram;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Scanner;
+
 import communication.DeliverCommand;
 import communication.Utils;
 
 import lejos.pc.comm.*;
 
 
-public class PCComm {
+public class PCProgram {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) 
 	{
+		while(true)
+		{
+			Scanner scanner = new Scanner(System.in);
+			System.out.print("\nEnter coordinate X: ");
+			float x = scanner.nextFloat();
+			System.out.print("\nEnter coordinate Y: ");
+			float y = scanner.nextFloat();
+			
+			System.out.println("\nSending Robot to position (" + x + ", " + y + ")" );
+			sendPosition(x, y);	
+		}
+	}
+
+	public static void sendPosition(float x, float y) {
+		
 		String[] names = new String[4];
 		names[0] = "Robot2";
 		names[1] = "Robot1";
@@ -26,7 +44,7 @@ public class PCComm {
 		{
 			try {
 				NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
-				NXTInfo[] nxtInfos = nxtComm.search("maria",NXTCommFactory.BLUETOOTH);
+				NXTInfo[] nxtInfos = nxtComm.search(names[i],NXTCommFactory.BLUETOOTH);
 				
 				if(nxtInfos.length > 0)
 				{
@@ -53,28 +71,27 @@ public class PCComm {
 			
 			DataOutputStream dos = conn.getDataOut();
 			DataInputStream dis = conn.getDataIn();
+		
+		
+			DeliverCommand deliverCommand = new DeliverCommand(x, y);
+			String command = deliverCommand.Serialize();
 			
-			for(int i = 0; i< 10; i++)
-			{
-				DeliverCommand deliverCommand = new DeliverCommand(i, i*2);
-				String command = deliverCommand.Serialize();
-				
-				try {
-					Utils.send(dos, command);
-					System.out.println(">>" + command);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				try {
-					String response = Utils.receive(dis);
-					System.out.println("<<" + response);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			try {
+				Utils.send(dos, command);
+				System.out.println(">>" + command);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
+			try {
+				String response = Utils.receive(dis);
+				System.out.println("<<" + response);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 
 			try {
 				dis.close();
@@ -91,9 +108,6 @@ public class PCComm {
 		{
 			System.out.println("Couldn't find any NXT");
 		}
-		
-		
-		
 	}
 
 }

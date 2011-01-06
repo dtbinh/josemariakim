@@ -1,4 +1,4 @@
-
+package r2_pc;
 import lejos.nxt.*;
 import lejos.nxt.addon.RCXLightSensor;
 /**

@@ -1,4 +1,4 @@
-
+package r2_pc;
 import communication.DataLogger;
 
 import lejos.nxt.LCD;

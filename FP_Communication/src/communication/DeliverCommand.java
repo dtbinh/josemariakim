@@ -19,9 +19,8 @@ public class DeliverCommand extends Command {
 		super(logger);
 		commandID = ID;
 		
-		parameters.put("X", Float.toString(x));
 		parameters.put("Y", Float.toString(y));
-		
+		parameters.put("X", Float.toString(x));
 	}
 	
 	public DeliverCommand(float x, float y) 
