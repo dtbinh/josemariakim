@@ -85,7 +85,7 @@ public class SenseIdentifyObject extends Behavior
         int distance = us.getDistance();
         if (distance < foundThreshold)
         {
-        	// Stop robot until released
+        	// Stop robot until released by user
   			stop();
         	stopped = true;
         	
@@ -106,9 +106,11 @@ public class SenseIdentifyObject extends Behavior
 				Sound.playTone(100, 2000, 50); // Low tone
 					
 			// Stop and await for object to be removed
+			stop();
+			delay(15000);
+			
 			while (stopped)
 			{
-				stop();
 				delay(1000);
 			}
         } 

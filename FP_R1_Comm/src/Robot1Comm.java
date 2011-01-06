@@ -29,15 +29,18 @@ public class Robot1Comm implements ButtonListener
 	  
 	  if (b == Button.ENTER)
 	  {
+	  }
+	  if (b == Button.LEFT)
+	  {
 		  tb.ResetTurns();
 		  sio.ResetPose();
 		  sio.Pause(false);
 	  }
-	  if (b == Button.LEFT)
-	  {
-	  }
 	  if (b == Button.RIGHT)
 	  {
+		  tb.ResetTurns();
+		  sio.ResetPose();
+		  sio.Pause(false);
 	  }
     }
 	
