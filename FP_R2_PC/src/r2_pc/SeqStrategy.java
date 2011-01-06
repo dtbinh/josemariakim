@@ -119,7 +119,7 @@ public class SeqStrategy extends Behavior
     			logLine("There were errors receiving the home location");
     	}
            	    	
-    	// Convert robot #1 position to location for robot #2
+    	// Get position for destination
     	Pose pose = homeLoc.GetRobot1Pose();
     	x_loc = Math.round(pose.getX());
     	y_loc = Math.round(pose.getY());
@@ -133,35 +133,12 @@ public class SeqStrategy extends Behavior
         liftGripArm();
         delay(2500); // Object must be manual removed 
         rotateTo(0, true);
-		WaitMoving();   	
+		WaitMoving();   
+		delay(100);
+		// Move car manually to position 0,0
+        Car.setPose(0, 0, 0);
     }
- 
-	private void MoveObjectAway()
-	{
-		// Turn left
-		rotate(90);
-		delay(500); 
-		
-		// Move object forward
-		forward();
-		delay(2000); 
-		
-		// Stop and lift grip arm
-		stop();
-		liftGripArm();
-		delay(500); 
-		
-		// Move backward
-		backward();
-		delay(1000);
-		
-		// Turn right
-	    rotate(-180);
-	    delay(1000);      
-		stop();	
-	}
-
-    
+     
     public void run() 
     {
     	int distance;
@@ -177,12 +154,13 @@ public class SeqStrategy extends Behavior
             release();		   
 
             // Let find object behavior get close to object
-        	tooCloseCount = 15;
+        	tooCloseCount = 10;
             while ( tooCloseCount > 0 )
             {
                 distance = us.getDistance();
                 drawInt(distance);
                 if (distance < tooCloseThreshold) tooCloseCount--;
+                delay(1);
             }
             
             suppress();	
@@ -190,7 +168,6 @@ public class SeqStrategy extends Behavior
         	GripObject();
         	// Bring object home and release it
         	BringObjectHome();
-        	//MoveObjectAway();
             release();		   
         }
     }

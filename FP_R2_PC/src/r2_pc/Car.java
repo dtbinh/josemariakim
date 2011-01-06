@@ -44,7 +44,13 @@ public class Car
     	robot.updatePose();
     	return robot.getPose();
     }     
-  
+    
+    public static synchronized void setPose(int x, int y, int heading)
+    {
+    	robot.updatePose();
+    	robot.setPose(0, 0, 0);
+    }
+ 
     public static synchronized void forward(int leftPower, int rightPower)
     {
     	// Steer values between -200 to 200 thats why multiply by two

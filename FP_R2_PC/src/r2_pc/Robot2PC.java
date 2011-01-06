@@ -27,7 +27,7 @@ public class Robot2PC
  	    
 		Car.InitCar();
     	
-        LCD.drawString("Robot 2 NavGrip",0,0);
+        LCD.drawString("Robot 2 PCCom",0,0);
         LCD.refresh();
     	
         fo = new FindObject("Find", 3, null, logger);
